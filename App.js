@@ -18,12 +18,13 @@ import CreateUser from "./screens/CreateUser";
 import Details from "./screens/Details";
 import Home from "./screens/Home";
 import Profil from "./screens/Profil";
+import UpdateUser from "./screens/UpdateUser";
 import Recapitulatif from "./screens/Recapitulatif";
 import Search from "./screens/Search";
 import Paiement from "./screens/Stripe";
 import Deconnexion from "./screens/Deconnexion";
 import { createStackNavigator } from "@react-navigation/stack";
-import { DrawerContent } from "./screens/DrawerContent";
+import DrawerContent from "./screens/DrawerContent";
 
 import {
   NavigationContainer,
@@ -58,7 +59,7 @@ function HomeStackScreen({ navigation }) {
         name="Home"
         component={Home}
         options={{
-          headerStyle: { backgroundColor: "white" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -77,7 +78,7 @@ function HomeStackScreen({ navigation }) {
         name="Search"
         component={Search}
         options={{
-          headerStyle: { backgroundColor: "white" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -88,7 +89,7 @@ function HomeStackScreen({ navigation }) {
         name="Details"
         component={Details}
         options={{
-          headerStyle: { backgroundColor: "white" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -99,19 +100,12 @@ function HomeStackScreen({ navigation }) {
         name="Basket"
         component={Basket}
         options={{
-          headerStyle: { backgroundColor: "white" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
-          headerLeft: () => (
-            <TouchableHighlight
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <FontAwesome name="bars" size={20} style={{ color: "black" }} />
-            </TouchableHighlight>
-          ),
-          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: null,
         }}
       />
 
@@ -119,7 +113,7 @@ function HomeStackScreen({ navigation }) {
         name="Recapitulatif"
         component={Recapitulatif}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -135,7 +129,7 @@ function HomeStackScreen({ navigation }) {
         name="Confirm"
         component={Confirm}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -155,16 +149,18 @@ function ConnexionStackScreen({ navigation }) {
         name="Connexion"
         component={Connexion}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
           headerLeft: () => (
-            <TouchableHighlight
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <FontAwesome name="bars" size={20} style={{ color: "black" }} />
+            <TouchableHighlight onPress={() => navigation.goBack()}>
+              <FontAwesome
+                name="chevron-left"
+                size={20}
+                style={{ color: "black" }}
+              />
             </TouchableHighlight>
           ),
           headerLeftContainerStyle: { marginLeft: 20 },
@@ -174,7 +170,7 @@ function ConnexionStackScreen({ navigation }) {
         name="CreateUser"
         component={CreateUser}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -185,9 +181,21 @@ function ConnexionStackScreen({ navigation }) {
         name="Profil"
         component={Profil}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
-          headerTintColor: "white",
+          headerTintColor: "black",
+          headerTitleStyle: { fontWeight: "bold" },
+          headerTitleAlign: "center",
+          headerLeft: null,
+        }}
+      />
+      <ConnexionStack.Screen
+        name="UpdateUser"
+        component={UpdateUser}
+        options={{
+          headerStyle: styles.headerStyle,
+          title: "ZARA BOWL",
+          headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
           headerLeft: null,
@@ -203,19 +211,12 @@ function BasketStackScreen({ navigation }) {
         name="Panier"
         component={Basket}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
-          headerTintColor: "white",
+          headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
-          headerLeft: () => (
-            <TouchableHighlight
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <FontAwesome name="bars" size={20} style={{ color: "white" }} />
-            </TouchableHighlight>
-          ),
-          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: null,
         }}
       />
     </BasketStack.Navigator>
@@ -228,9 +229,9 @@ function ProfilStackScreen({ navigation }) {
         name="Profil"
         component={Profil}
         options={{
-          headerStyle: { backgroundColor: "orange" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
-          headerTintColor: "white",
+          headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
         }}
@@ -246,7 +247,7 @@ function deconnexionStackScreen({ navigation }) {
         name="deconnexion"
         component={Deconnexion}
         options={{
-          headerStyle: { backgroundColor: "#FF9F1C" },
+          headerStyle: styles.headerStyle,
           title: "ZARA BOWL",
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
@@ -268,6 +269,12 @@ function MyDrawer() {
     </Drawer.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: "#FF9F1C",
+  },
+});
 export default function App() {
   return (
     <Provider store={store}>

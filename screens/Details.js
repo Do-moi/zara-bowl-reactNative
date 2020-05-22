@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { Button, Overlay } from "react-native-elements";
 import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Overlay,
-} from "react-native-elements";
-
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { Dropdown } from "react-native-material-dropdown";
 import { connect } from "react-redux";
 
@@ -64,11 +52,10 @@ function Details({ navigation, route, saveBasketClick }) {
     { value: "5" },
     { value: "6" },
   ];
-  // useEffect(() => {
-  //   return () => { console.log("=============App is destroyed")} ;
-  // }, []);
+  useEffect(() => {
+    setError("");
+  }, [thePoids]);
 
-  // saveBasketClick({brand,name,price,thePoids,theQuantite});navigation.navigate("Panier")}
   function addBasketClick() {
     if (thePoids == "" || theQuantite == "") {
       setError("veuillez sélectionner le poids et la quantité");
@@ -80,11 +67,11 @@ function Details({ navigation, route, saveBasketClick }) {
     }
   }
 
-  console.log("============ img", img);
-  console.log("============the quantité", theQuantite);
+  // console.log("============ img", img);
+  // console.log("============the quantité", theQuantite);
 
   return (
-    <ScrollView style={{ backgroundColor: "#00adb5" }}>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
         <Overlay
           isVisible={isVisible}
@@ -140,29 +127,25 @@ function Details({ navigation, route, saveBasketClick }) {
           </ScrollView>
         </Overlay>
 
-        <Text style={{ fontSize: 25, marginTop: 20, textAlign: "center" }}>
+        <Text
+          style={{
+            fontSize: 25,
+            marginTop: 20,
+            color: "#2484f2",
+          }}
+        >
           {brand} {name}
         </Text>
 
         <View style={{ flex: 1, flexDirection: "row", marginTop: 30 }}>
-          <View style={{ flex: 1, width: 150, height: 200 }}>
+          <View
+            style={{ flex: 1, width: 150, height: 100, alignItems: "center" }}
+          >
             <Image
               style={{ width: 150, height: 150, marginLeft: 10 }}
               resizeMode={"cover"}
               source={{ uri: img }}
             />
-          </View>
-          <View>
-            <Image
-              style={{ width: 150, height: 150, marginRight: 10 }}
-              resizeMode={"cover"}
-              source={{ uri: imgCore }}
-            />
-          </View>
-        </View>
-
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
             <Button
               title="Description"
               containerStyle={{ alignItems: "center" }}
@@ -170,36 +153,10 @@ function Details({ navigation, route, saveBasketClick }) {
               onPress={() => setIsVisible(true)}
               titleStyle={{ color: "black" }}
             ></Button>
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <Button
-              title="Caractéristique"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "white" }}
-              onPress={() => setVisible(true)}
-              titleStyle={{ color: "black" }}
-            ></Button>
-          </View>
-        </View>
-
-        <Text
-          style={{
-            color: "red",
-            fontSize: 20,
-            marginTop: 40,
-            textAlign: "center",
-          }}
-        >
-          {error}
-        </Text>
-
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
             <Dropdown
               label="poids"
               data={poids}
-              pickerStyle={{ borderBottomColor: "transparent", borderWidth: 0 }}
+              pickerStyle={{ borderBottomColor: "orange", borderWidth: 1 }}
               dropdownOffset={{ top: 0, left: 10 }}
               textColor="black"
               baseColor="black"
@@ -209,12 +166,22 @@ function Details({ navigation, route, saveBasketClick }) {
               }}
             />
           </View>
-
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Image
+              style={{ width: 150, height: 150, marginRight: 10 }}
+              resizeMode={"cover"}
+              source={{ uri: imgCore }}
+            />
+            <Button
+              title="Caractéristique"
+              containerStyle={{ alignItems: "center" }}
+              buttonStyle={{ backgroundColor: "white" }}
+              onPress={() => setVisible(true)}
+              titleStyle={{ color: "black" }}
+            ></Button>
             <Dropdown
               label="quantité"
               data={quantite}
-              // pickerStyle={{ borderBottomColor: "black", borderWidth: 1 }}
               dropdownOffset={{ top: 0, left: 10 }}
               textColor="black"
               baseColor="black"
@@ -226,6 +193,16 @@ function Details({ navigation, route, saveBasketClick }) {
           </View>
         </View>
 
+        <Text
+          style={{
+            color: "red",
+            fontSize: 15,
+            marginTop: 15,
+            textAlign: "center",
+          }}
+        >
+          {error}
+        </Text>
         <View
           style={{
             flex: 1,
@@ -234,34 +211,30 @@ function Details({ navigation, route, saveBasketClick }) {
             marginBottom: 10,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginTop: 10, width: "100%" }}>
             <Button
               title="ajouter panier"
-              containerStyle={{ alignItems: "center" }}
+              containerStyle={{ alignItems: "center", width: "85%" }}
               buttonStyle={{ backgroundColor: "orange" }}
               onPress={() => addBasketClick()}
-              titleStyle={{ color: "black" }}
-            ></Button>
-          </View>
-          <View style={{ flex: 1, marginTop: 20 }}>
-            <Button
-              title="retour accueil"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "orange" }}
-              onPress={() => navigation.navigate("Home")}
-              titleStyle={{ color: "black" }}
+              titleStyle={{ color: "black", flex: 1 }}
             ></Button>
           </View>
 
-          {/* <View style={{ flex: 1, marginTop: 10 }}>
+          <View style={{ flex: 1, marginTop: 10 }}>
             <Button
-              title="ajouter panier"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "orange" }}
-              onPress={() => addBasketClick()}
-              titleStyle={{ color: "black" }}
+              title="retour accueil"
+              containerStyle={{
+                alignItems: "center",
+                borderColor: "orange",
+                borderWidth: 1,
+                borderRadius: 5,
+              }}
+              buttonStyle={{ backgroundColor: "white" }}
+              onPress={() => navigation.navigate("Home")}
+              titleStyle={{ color: "orange", flex: 1 }}
             ></Button>
-          </View> */}
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -276,16 +249,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   dropdown: {
-    width: "85%",
-    height: 50,
+    width: "60%",
+    height: 40,
     backgroundColor: "white",
     opacity: 0.8,
-    margin: 10,
-    padding: 10,
+    marginLeft: 0,
+    padding: 2,
     marginTop: 20,
-    borderRadius: 10,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "black",
+  },
+  sizeImg: {
+    height: hp("70%"), // 70% of height device screen
+    width: wp("80%"), // 80% of width device screen
   },
 });
 function mapDispatchToProps(dispatch) {

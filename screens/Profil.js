@@ -20,45 +20,55 @@ import {
 import Menu from "./Menu";
 import { Dropdown } from "react-native-material-dropdown";
 import { connect } from "react-redux";
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions } from "@react-navigation/native";
 
-
-function Profil({ navigation, token, userProfil }) {
+function Profil({ navigation, token, userProfil, deconnexionClick }) {
   var tab = [];
-  console.log('==========profil token',token)
-  
-  console.log("=======profil user", userProfil);
+  // console.log("==========profil token", token);
+
+  // console.log("=======userProfil", userProfil);
 
   if (userProfil.commande) {
     tab = userProfil.commande;
   }
   const [isVisible, setIsVisible] = useState(false);
   const [cmdDesc, setCmdDesc] = useState({});
-  // const {token} = route.params;
-  // console.log('=======route params',token)
+
   const [profilUser, setProfilUser] = useState({});
-  // useEffect(() => {
-  //   const findApi = async () => {
-  //     var resp = await fetch("http://192.168.1.115:3000/profil", {
-  //       method: "POST",
-  //       headers: { "content-type": "application/x-www-form-urlencoded" },
-  //       body: `tokenProfil=${token}`,
-  //     });
-  //     var jsonResp = await resp.json();
-  //     console.log("=====json resp", jsonResp);
-      
-  //   };
-  //   findApi();
-  // }, []);
+
   function handleClick(ball) {
     console.log("======handleClick", ball);
     setIsVisible(true);
     setCmdDesc(ball);
   }
+  var deleteProfil = async () => {
+    var deleteUser = await fetch(
+      `http://192.168.1.115:3000/deleteProfil?token=${token}`,
+      {
+        method: "DELETE",
+      }
+    );
+    var deleteJson = await deleteUser.json();
+    console.log("======================deleteJson====", deleteJson);
+    if (deleteJson.userDeleted == 1) {
+      deconnexionClick();
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            { name: "Profil" },
+            {
+              name: "Home",
+            },
+          ],
+        })
+      );
+    }
+  };
 
   var gallery = tab.map((ball, i) => {
     return (
-      <View style={{ height: 70 }}>
+      <View style={{ width: "100%" }}>
         <ListItem
           key={i}
           leftAvatar={{ source: { uri: ball.img } }}
@@ -73,9 +83,52 @@ function Profil({ navigation, token, userProfil }) {
       </View>
     );
   });
-
+  // console.log("==============gallery", gallery);
+  if (token) {
+    var loged = (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          marginTop: 20,
+          marginBottom: 30,
+        }}
+      >
+        <View style={{ flex: 1, alignItems: "center" }}>
+          <Button
+            title="modifier profil"
+            titleStyle={{ color: "orange" }}
+            containerStyle={{
+              alignItems: "center",
+              borderWidth: 1,
+              borderColor: "orange",
+              borderRadius: 5,
+              width: "80%",
+            }}
+            buttonStyle={{ backgroundColor: "white" }}
+            onPress={() => navigation.navigate("UpdateUser")}
+          ></Button>
+        </View>
+        {/* 
+        <View style={{ flex: 1, alignItems: "center" }}>
+          <Button
+            title="supprimer profil"
+            titleStyle={{ color: "black" }}
+            containerStyle={{
+              borderWidth: 1,
+              borderColor: "orange",
+              borderRadius: 5,
+              width: "80%",
+            }}
+            buttonStyle={{ backgroundColor: "orange" }}
+            onPress={() => deleteProfil()}
+          ></Button>
+        </View> */}
+      </View>
+    );
+  }
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
         <Overlay
           isVisible={isVisible}
@@ -85,16 +138,19 @@ function Profil({ navigation, token, userProfil }) {
             <Text style={{ textAlign: "center", fontWeight: "bold" }}>
               Description{" "}
             </Text>
-            <Text>Marque : {cmdDesc.brand}</Text>
+            <Text style={{ marginTop: 20 }}>Marque : {cmdDesc.brand}</Text>
             <Text>Model : {cmdDesc.name}</Text>
             <Text>Poids : {cmdDesc.poids}</Text>
             <Text>Prix unitaire: {cmdDesc.price}€</Text>
             <Text>Quantité : {cmdDesc.qte}</Text>
-            <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+            <Text
+              style={{ textAlign: "center", fontWeight: "bold", marginTop: 20 }}
+            >
               Coordonnée de livraison{" "}
             </Text>
-            <Text>Nom : {cmdDesc.nom}</Text>
+            <Text style={{ marginTop: 20 }}>Nom : {cmdDesc.nom}</Text>
             <Text>Prénom : {cmdDesc.prenom}</Text>
+            <Text>téléphone : {cmdDesc.telephone}</Text>
             <Text>Adresse : {cmdDesc.adresse}</Text>
             <Text>Postal : {cmdDesc.postal}</Text>
             <Text>Ville : {cmdDesc.ville}</Text>
@@ -106,67 +162,83 @@ function Profil({ navigation, token, userProfil }) {
         </Text>
 
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             nom:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.nom}</Text>
         </View>
 
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             prenom:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.prenom}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
+            téléphone:
+          </Text>
+          <Text style={{ flex: 5 }}>{userProfil.telephone}</Text>
+        </View>
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             email:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.email}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             adresse:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.adresse}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             postal:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.postal}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={{ flex: 1, marginLeft: 10, fontWeight: "bold" }}>
-            ville
+          <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
+            ville:
           </Text>
           <Text style={{ flex: 5 }}>{userProfil.ville}</Text>
         </View>
-
-        <Text style={{ fontSize: 18, marginTop: 20, textAlign: "center" }}>
+        {loged}
+        <Text
+          style={{
+            fontSize: 18,
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
           HISTORIQUE ACHATS
         </Text>
-        <View style={{ flex: 1 }}>{gallery}</View>
+        {gallery}
+
         <Button
           title="revenir accueil"
           containerStyle={{
             alignItems: "center",
             marginTop: 30,
             marginBottom: 30,
+            width: "85%",
           }}
           buttonStyle={{ backgroundColor: "orange" }}
-          onPress={() =>navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [
-                { name: 'Profil' },
-                {
-                  name: 'Home',
-                  
-                },
-              ],
-            })
-          )}
+          titleStyle={{ color: "black", flex: 1 }}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  { name: "Profil" },
+                  {
+                    name: "Home",
+                  },
+                ],
+              })
+            )
+          }
         ></Button>
       </View>
     </ScrollView>
@@ -177,9 +249,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    alignItems: "center",
   },
 });
 function mapStateToProps(state) {
-  return { token: state.token , userProfil: state.userProfil};
+  return { token: state.token, userProfil: state.userProfil };
 }
-export default connect(mapStateToProps, null)(Profil);
+function mapDispatchToProps(dispatch) {
+  return {
+    deconnexionClick: function () {
+      dispatch({ type: "deconnexion" }),
+        dispatch({ type: "deleteToken" }),
+        dispatch({ type: "deleteProfil" });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profil);

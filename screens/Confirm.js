@@ -13,10 +13,12 @@ import {
   Overlay,
 } from "react-native-elements";
 import { connect } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
 
 function Confirm({ navigation, route, ball, deleteBasketClick }) {
   const { nom } = route.params;
   const { prenom } = route.params;
+  const { telephone } = route.params;
   const { adresse } = route.params;
   const { postal } = route.params;
   const { ville } = route.params;
@@ -28,23 +30,13 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
     totalQte = parseInt(ball.theQuantite, 10) + totalQte;
 
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          borderStyle: "solid",
-          borderColor: "black",
-          borderWidth: 1,
-          borderRadius: 10,
-          margin: 10,
-          height: 40,
-          backgroundColor: "#FFBC4F",
-        }}
-      >
+      <View style={styles.divstyle}>
         <View
           style={{
             flex: 4,
-            backgroundColor: "#FFBC4F",
-            marginLeft: 10,
+            backgroundColor: "white",
+            marginLeft: 0,
+            borderRadius: 5,
             justifyContent: "center",
           }}
         >
@@ -56,7 +48,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "#FFBC4F",
+            backgroundColor: "white",
             justifyContent: "center",
           }}
         >
@@ -66,7 +58,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "#FFBC4F",
+            backgroundColor: "white",
             justifyContent: "center",
           }}
         >
@@ -76,7 +68,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "#FFBC4F",
+            backgroundColor: "white",
             justifyContent: "center",
             marginRight: 10,
             borderStyle: "solid",
@@ -89,147 +81,136 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
     );
   });
   return (
-    <View style={styles.container}>
-      <Text style={{ marginTop: 20, marginBottom: 10 }}>
-        Confirmation de paiement
-      </Text>
-
-      <View
-        style={{
-          flexDirection: "row",
-          height: 40,
-          margin: 10,
-          borderStyle: "solid",
-          borderColor: "black",
-          borderWidth: 1,
-          borderRadius: 10,
-          backgroundColor: "orange",
-        }}
-      >
-        <View
-          style={{
-            flex: 4,
-            backgroundColor: "orange",
-            marginLeft: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ paddingLeft: 10 }}>produit</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "orange",
-            justifyContent: "center",
-          }}
-        >
-          <Text>poids</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "orange",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text>qté</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "orange",
-            justifyContent: "center",
-            marginRight: 10,
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>prix</Text>
-        </View>
-      </View>
-
-      {ballTab}
-
-      <View
-        style={{
-          flexDirection: "row",
-          margin: 10,
-          height: 40,
-          borderStyle: "solid",
-          borderColor: "black",
-          borderWidth: 1,
-          borderRadius: 10,
-          backgroundColor: "#FEC062",
-        }}
-      >
-        <View
-          style={{
-            flex: 4,
-            backgroundColor: "#FEC062",
-            marginLeft: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ paddingLeft: 10 }}>total</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#FEC062",
-            justifyContent: "center",
-          }}
-        >
-          <Text></Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#FEC062",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{totalQte}</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#FEC062",
-            marginRight: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{totalCmd}€</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, marginTop: 40, marginLeft: 10, marginRight: 10 }}>
-        <Text>
-          Votre commande à bien été validé , elle vous sera livré à l'adresse
-          suivant:
+    <ScrollView style={{ backgroundColor: "white" }}>
+      <View style={styles.container}>
+        <Text style={{ marginTop: 20, marginBottom: 10 }}>
+          Confirmation de paiement
         </Text>
-        <Text>{nom}</Text>
-        <Text>{prenom}</Text>
-        <Text>{adresse}</Text>
-        <Text>{postal}</Text>
-        <Text>{ville}</Text>
+
+        <View style={styles.divstyleOrange}>
+          <View
+            style={{
+              flex: 4,
+              backgroundColor: "orange",
+              marginLeft: 10,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ paddingLeft: 5 }}>produit</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+            }}
+          >
+            <Text>poids</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text>qté</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+              marginRight: 10,
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>prix</Text>
+          </View>
+        </View>
+
+        {ballTab}
+
+        <View style={styles.divstyle}>
+          <View
+            style={{
+              flex: 4,
+              backgroundColor: "white",
+              marginLeft: 10,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ paddingLeft: 5 }}>total</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text></Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{totalQte}</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              marginRight: 10,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{totalCmd}€</Text>
+          </View>
+        </View>
+        <View
+          style={{ flex: 1, marginTop: 40, marginLeft: 10, marginRight: 10 }}
+        >
+          <Text>
+            Merci pour votre commande, elle a bien été validée et vous sera
+            livrée à l'adresse suivante:
+          </Text>
+          <Text style={{ textAlign: "center", marginTop: 10 }}>
+            {nom} {prenom}
+          </Text>
+          <Text style={{ textAlign: "center" }}>tel: {telephone}</Text>
+          <Text style={{ textAlign: "center" }}>{adresse}</Text>
+          <Text style={{ textAlign: "center" }}>
+            {postal} {ville}
+          </Text>
+          <Text style={{ marginTop: 10 }}>
+            Un e-mail de confirmation vous sera envoyé après l'expédition de
+            votre colis.
+          </Text>
+        </View>
+        <View style={{ flex: 1, marginTop: 20, marginBottom: 40 }}>
+          <Button
+            title="Retour à l'accueil"
+            containerStyle={{ alignItems: "center", width: "85%" }}
+            buttonStyle={{ backgroundColor: "orange" }}
+            titleStyle={{ color: "black", flex: 1 }}
+            onPress={() => {
+              navigation.navigate("Home");
+              deleteBasketClick();
+            }}
+          ></Button>
+        </View>
       </View>
-      <View style={{ flex: 1 }}>
-        <Button
-          title="Retour à l'accueil"
-          containerStyle={{ alignItems: "center" }}
-          buttonStyle={{ backgroundColor: "orange" }}
-          titleStyle={{ color: "black" }}
-          onPress={() => {
-            navigation.navigate("Home");
-            deleteBasketClick();
-          }}
-        ></Button>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -238,6 +219,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     alignItems: "center",
+  },
+  divstyleOrange: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "orange",
+    borderStyle: "solid",
+    margin: 0,
+    borderRadius: 5,
+    width: "95%",
+    backgroundColor: "orange",
+  },
+  divstyle: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "orange",
+    borderStyle: "solid",
+    margin: 0,
+    borderRadius: 5,
+    width: "95%",
+    backgroundColor: "white",
   },
 });
 function mapStateToProps(state) {

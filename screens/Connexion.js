@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Menu from "./Menu";
@@ -22,6 +23,10 @@ import {
 } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 function Connexion({ navigation, saveToken, route, saveUserProfil }) {
   const [email, setEmail] = useState("");
@@ -54,22 +59,20 @@ function Connexion({ navigation, saveToken, route, saveUserProfil }) {
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/fireball.jpg")}
-          style={{ width: "100%", height: 180, flex: 1 }}
-        ></ImageBackground>
-        <Text style={{ fontSize: 20, marginTop: 30, color: "black" }}>
-          CONNEXION
-        </Text>
-
+        <View style={{ width: "100%", height: hp("35%") }}>
+          <ImageBackground
+            source={require("../assets/fireball.jpg")}
+            style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+          ></ImageBackground>
+        </View>
         <TextInput
           keyboardType="email-address" // a bit of extra love for your users
           autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="black"
+          placeholderTextColor="grey"
           placeholder="email"
           style={{
-            backgroundColor: "#DCDCDC",
-            borderRadius: 20,
+            backgroundColor: "white",
+            borderRadius: 5,
             height: 50,
             width: "85%",
             paddingLeft: 15,
@@ -78,20 +81,22 @@ function Connexion({ navigation, saveToken, route, saveUserProfil }) {
             marginBottom: 5,
             marginLeft: 30,
             fontSize: 18,
+            borderWidth: 1,
+            borderColor: "grey",
             color: "black",
           }}
           onChangeText={(e) => setEmail(e)}
-          clearTextOnFocus="true"
+          clearTextOnFocus={true}
         />
 
         <TextInput
           autoCompleteType="password"
           secureTextEntry={true}
-          placeholderTextColor="black"
-          placeholder="Saisir votre mot de passe"
+          placeholderTextColor="grey"
+          placeholder="mot de passe"
           style={{
-            backgroundColor: "#DCDCDC",
-            borderRadius: 20,
+            backgroundColor: "white",
+            borderRadius: 5,
             height: 50,
             width: "85%",
             paddingLeft: 15,
@@ -100,6 +105,8 @@ function Connexion({ navigation, saveToken, route, saveUserProfil }) {
             marginBottom: 5,
             marginLeft: 30,
             fontSize: 18,
+            borderColor: "grey",
+            borderWidth: 1,
             color: "black",
           }}
           onChangeText={(e) => setPassword(e)}
@@ -107,23 +114,28 @@ function Connexion({ navigation, saveToken, route, saveUserProfil }) {
 
         <Text style={{ color: "red", fontSize: 20 }}>{error}</Text>
 
-        <View style={{ flex: 1, flexDirection: "row", marginTop: 60 }}>
+        <View style={{ flex: 1, flexDirection: "column", marginTop: 10 }}>
           <View style={{ flex: 1 }}>
             <Button
               title="Se connecter"
-              containerStyle={{ alignItems: "center" }}
+              containerStyle={{ alignItems: "center", width: "100%" }}
               buttonStyle={{ backgroundColor: "orange" }}
-              titleStyle={{ color: "black" }}
+              titleStyle={{ color: "white", flex: 1 }}
               onPress={() => handleSubmitSignIn(email, password)}
             ></Button>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, width: "100%" }}>
             <Button
               title="Créer un compte"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "orange" }}
-              titleStyle={{ color: "black" }}
+              containerStyle={{ alignItems: "center", width: "85%" }}
+              buttonStyle={{
+                backgroundColor: "white",
+                marginTop: 20,
+                borderWidth: 1,
+                borderColor: "orange",
+              }}
+              titleStyle={{ color: "orange", flex: 1 }}
               onPress={() => navigation.navigate("CreateUser")}
             ></Button>
           </View>

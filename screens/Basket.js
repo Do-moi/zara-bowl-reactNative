@@ -20,6 +20,10 @@ import {
   Header,
   Badge,
 } from "react-native-elements";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 function Basket({ navigation, ball, deleteClick, token }) {
   console.log("==========basket", ball);
@@ -35,17 +39,28 @@ function Basket({ navigation, ball, deleteClick, token }) {
   var ballChoice = ball.map((ball, i) => {
     return (
       <View
-        style={{ flex: 1, flexDirection: "row", marginTop: 20, height: 40 }}
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          marginTop: 5,
+          height: 40,
+          borderWidth: 1,
+          borderColor: "black",
+          borderStyle: "solid",
+          borderRadius: 5,
+          width: "95%",
+        }}
       >
         <View
           style={{
-            flex: 4,
+            flex: 3,
             backgroundColor: "white",
-            marginLeft: 10,
+            marginLeft: 5,
             justifyContent: "center",
+            borderRadius: 10,
           }}
         >
-          <Text style={{ marginLeft: 10 }}>
+          <Text style={{ marginLeft: 1 }}>
             {ball.brand} {ball.name}
           </Text>
         </View>
@@ -85,7 +100,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
             flex: 1,
             backgroundColor: "white",
             justifyContent: "center",
-            marginRight: 10,
+            borderRadius: 10,
             alignItems: "center",
           }}
         >
@@ -115,13 +130,19 @@ function Basket({ navigation, ball, deleteClick, token }) {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.container}>
-        <ImageBackground
+        {/* <ImageBackground
           source={require("../assets/fireball.jpg")}
-          style={{ width: "100%", height: 180, flex: 1 }}
-        ></ImageBackground>
-        <Text style={{ fontSize: 20, marginTop: 10, color: "black" }}>
+          style={{ width: "100%", height: 180 }}
+        ></ImageBackground> */}
+        <View style={{ width: "100%", height: hp("30%") }}>
+          <ImageBackground
+            source={require("../assets/fireball.jpg")}
+            style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+          ></ImageBackground>
+        </View>
+        <Text style={{ fontSize: 20, color: "black", marginTop: 10 }}>
           PANIER
         </Text>
 
@@ -129,21 +150,24 @@ function Basket({ navigation, ball, deleteClick, token }) {
           style={{
             flex: 1,
             flexDirection: "row",
-            marginTop: 40,
+            marginTop: 10,
             height: 40,
             borderWidth: 1,
-            borderColor: "black",
+            borderColor: "orange",
             borderStyle: "solid",
-            margin: 10,
-            borderRadius: 10,
+            margin: 0,
+            borderRadius: 5,
+            width: "95%",
+            backgroundColor: "orange",
           }}
         >
           <View
             style={{
-              flex: 4,
-              backgroundColor: "white",
-              marginLeft: 10,
+              flex: 3,
+              backgroundColor: "orange",
+              marginLeft: 0,
               justifyContent: "center",
+              borderRadius: 5,
             }}
           >
             <Text style={{ marginLeft: 10 }}>produit</Text>
@@ -152,7 +176,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "white",
+              backgroundColor: "orange",
               justifyContent: "center",
             }}
           >
@@ -162,7 +186,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "white",
+              backgroundColor: "orange",
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -173,7 +197,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "white",
+              backgroundColor: "orange",
               justifyContent: "center",
             }}
           >
@@ -183,9 +207,10 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "white",
-              marginRight: 10,
+              backgroundColor: "orange",
+              marginRight: 0,
               justifyContent: "center",
+              borderRadius: 5,
             }}
           >
             <Text style={{ textAlign: "center" }}>supp</Text>
@@ -194,7 +219,14 @@ function Basket({ navigation, ball, deleteClick, token }) {
 
         {ballChoice}
 
-        <Text style={{ color: "red", fontSize: 30, marginTop: 20 }}>
+        <Text
+          style={{
+            color: "red",
+            fontSize: 30,
+            marginTop: 20,
+            textAlign: "center",
+          }}
+        >
           {error}
         </Text>
 
@@ -202,25 +234,36 @@ function Basket({ navigation, ball, deleteClick, token }) {
           style={{
             flex: 1,
             flexDirection: "row",
-            marginTop: 60,
+            marginTop: 20,
             marginBottom: 30,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: "center" }}>
             <Button
               title="retour accueil"
-              titleStyle={{ color: "black" }}
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "orange" }}
+              titleStyle={{ color: "orange" }}
+              containerStyle={{
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "orange",
+                borderRadius: 5,
+                width: "80%",
+              }}
+              buttonStyle={{ backgroundColor: "white" }}
               onPress={() => navigation.navigate("Home")}
             ></Button>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: "center" }}>
             <Button
               title="Valider panier"
               titleStyle={{ color: "black" }}
-              containerStyle={{ alignItems: "center" }}
+              containerStyle={{
+                borderWidth: 1,
+                borderColor: "orange",
+                borderRadius: 5,
+                width: "80%",
+              }}
               buttonStyle={{ backgroundColor: "orange" }}
               onPress={() => emptyBasket()}
             ></Button>

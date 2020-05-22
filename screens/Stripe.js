@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View ,ScrollView} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
 import {
   CreditCardInput,
   LiteCreditCardInput,
@@ -20,10 +26,19 @@ var stripe = require("stripe-client")(
 function Stripe({ navigation, route, ball, tokenRdx }) {
   const { nom } = route.params;
   const { prenom } = route.params;
+  const { telephone } = route.params;
   const { adresse } = route.params;
   const { postal } = route.params;
   const { ville } = route.params;
-console.log('=======params stripe',nom,prenom,adresse,postal,ville)
+  console.log(
+    "=======params stripe",
+    nom,
+    prenom,
+    telephone,
+    adresse,
+    postal,
+    ville
+  );
   const [cardData, setCardData] = useState({ valid: false });
   const [erreur, setErreur] = useState("");
   var totalCmd = 0;
@@ -34,243 +49,307 @@ console.log('=======params stripe',nom,prenom,adresse,postal,ville)
     totalQte = parseInt(ball.theQuantite, 10) + totalQte;
 
     return (
-      <View style={{ flexDirection: "row", marginTop: 10, height: 40 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <View
           style={{
-            flex: 4,
-            backgroundColor: "#ededed",
-            marginLeft: 10,
-            justifyContent: "center",
+            flexDirection: "row",
+            marginTop: 10,
+            height: 40,
+            backgroundColor: "white",
+            borderWidth: 1,
+            borderColor: "black",
+            borderRadius: 5,
+            width: "95%",
           }}
         >
-          <Text style={{ paddingLeft: 10 }}>
-            {ball.brand} {ball.name}
-          </Text>
-        </View>
+          <View
+            style={{
+              flex: 4,
+              backgroundColor: "white",
+              marginLeft: 5,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ paddingLeft: 10 }}>
+              {ball.brand} {ball.name}
+            </Text>
+          </View>
 
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-          }}
-        >
-          <Text>{ball.thePoids}</Text>
-        </View>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text>{ball.thePoids}</Text>
+          </View>
 
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{ball.theQuantite}</Text>
-        </View>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{ball.theQuantite}</Text>
+          </View>
 
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-            marginRight: 10,
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{ball.price}€</Text>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{ball.price}€</Text>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   });
-  console.log("========cardData", cardData);
 
-  async function stripeClick() {
-    var expiry = cardData.values.expiry;
-    var moisExp = expiry.split("/");
+  async function stripeClick({ navigation }) {
+    console.log("=========cardData==============", cardData);
+    var error = [];
+    if (cardData.valid == false) {
+      error.push("carte invalide");
+    }
+    if (error.length == 0) {
+      var expiry = cardData.values.expiry;
+      var moisExp = expiry.split("/");
 
-    var information = {
-      card: {
-        number: cardData.values.number,
-        exp_month: moisExp[0],
-        exp_year: moisExp[1],
+      var information = {
+        card: {
+          number: cardData.values.number,
+          exp_month: moisExp[0],
+          exp_year: moisExp[1],
 
-        cvc: cardData.values.cvc,
-        name: cardData.values.name,
-      },
-    };
+          cvc: cardData.values.cvc,
+          name: cardData.values.name,
+        },
+      };
 
-    console.log("=============", moisExp[1]);
+      // console.log("=============", moisExp[1]);
 
-    var carte = await stripe.createToken(information);
-    var token = carte.id;
+      var carte = await stripe.createToken(information);
+      var token = carte.id;
 
-    var commandeId = [
-      tokenRdx,
-      {
-        nom: nom,
-        prenom: prenom,
-        adresse: adresse,
-        postal: postal,
-        ville: ville,
-      },
-      { ball: ball },
-    ];
+      var commandeId = [
+        tokenRdx,
+        {
+          nom: nom,
+          prenom: prenom,
+          tel: telephone,
+          adresse: adresse,
+          postal: postal,
+          ville: ville,
+        },
+        { ball: ball },
+      ];
 
-    console.log("===========================", commandeId);
+      // console.log("===========================", commandeId);
 
-    var response = await fetch(`http://192.168.1.115:3000/commande`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, commandeId }),
-    })
-      .then((response) => {
-        return response.json();
+      var response = await fetch(`http://192.168.1.115:3000/commande`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, commandeId }),
       })
-      .then((data) => {
-        if (data.success === true) {
-          console.log("+===========================", data.success);
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success === true) {
+            console.log("+===========data.success", data.success);
 
-          navigation.navigate("Confirm", {
-            nom: nom,
-            prenom: prenom,
-            adresse: adresse,
-            postal: postal,
-            ville: ville,
-          });
-        } else {
-          setErreur("erreur de numéro de carte");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+            navigation.navigate("Confirm", {
+              nom: nom,
+              prenom: prenom,
+              telephone: telephone,
+              adresse: adresse,
+              postal: postal,
+              ville: ville,
+            });
+          } else {
+            setErreur("erreur de numéro de carte");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    setErreur(error[0]);
   }
   return (
-    <ScrollView style={{backgroundColor:"white"}}>
-    <View style={styles.container}>
-      <Text style={{ marginTop: 30 }}>PAIEMENT</Text>
-      <Text style={{ color: "red", fontSize: 20 }}>{erreur}</Text>
-      <View style={{ flexDirection: "row", height: 40 }}>
-        <View
-          style={{
-            flex: 4,
-            backgroundColor: "#ededed",
-            marginLeft: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ paddingLeft: 10 }}>produit</Text>
-        </View>
+    <ScrollView style={{ backgroundColor: "white" }}>
+      <View style={styles.container}>
+        <Text style={{ marginTop: 50, marginBottom: 30 }}>PAIEMENT</Text>
 
         <View
           style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
+            flexDirection: "row",
+            height: 40,
+            borderRadius: 5,
+            backgroundColor: "orange",
+            width: "95%",
           }}
         >
-          <Text>poids</Text>
+          <View
+            style={{
+              flex: 4,
+              backgroundColor: "orange",
+              marginLeft: 10,
+              justifyContent: "center",
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ paddingLeft: 10 }}>produit</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+            }}
+          >
+            <Text>poids</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text>qté</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "orange",
+              justifyContent: "center",
+              marginRight: 10,
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>prix</Text>
+          </View>
         </View>
+        {ballTab}
 
         <View
           style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
+            flexDirection: "row",
+            marginTop: 10,
+            height: 40,
+            borderRadius: 5,
+            backgroundColor: "white",
+            borderColor: "black",
+            borderWidth: 1,
+            width: "95%",
+          }}
+        >
+          <View
+            style={{
+              flex: 4,
+              backgroundColor: "white",
+              marginLeft: 5,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ paddingLeft: 10 }}>total</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text></Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{totalQte}</Text>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              marginRight: 5,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center" }}>{totalCmd}€</Text>
+          </View>
+        </View>
+        <View style={{ flex: 1, marginTop: 30 }}>
+          <CreditCardInput
+            placeholderColor={"silver"}
+            placeholders={{
+              number: "1234 5678 1234 5678",
+              expiry: "MM/YY",
+              cvc: "CVC",
+              name: "NOM",
+            }}
+            labels={{
+              number: "N° DE CARTE",
+              expiry: "EXP",
+              cvc: "CVC",
+              name: "NOM",
+              brand: "VISA",
+            }}
+            // cardImageFront={require("../assets/homePage.jpeg")}
+
+            requiresName
+            onChange={(e) => setCardData(e)}
+          />
+        </View>
+        <Text style={{ color: "red", fontSize: 20 }}>{erreur}</Text>
+        <Button
+          title="Paiement"
+          containerStyle={{
             alignItems: "center",
-          }}
-        >
-          <Text>qté</Text>
-        </View>
+            marginTop: 20,
 
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-            marginRight: 10,
+            width: "85%",
           }}
-        >
-          <Text style={{ textAlign: "center" }}>prix</Text>
-        </View>
+          buttonStyle={{ backgroundColor: "orange" }}
+          titleStyle={{ flex: 1, color: "black" }}
+          onPress={() => stripeClick()}
+        ></Button>
+        <Button
+          title="annuler le paiement"
+          containerStyle={{
+            alignItems: "center",
+            marginTop: 20,
+            marginBottom: 20,
+            width: "85%",
+          }}
+          buttonStyle={{
+            backgroundColor: "white",
+            borderWidth: 1,
+            borderColor: "orange",
+          }}
+          titleStyle={{ flex: 1, color: "orange" }}
+          onPress={() => navigation.navigate("Home")}
+        ></Button>
       </View>
-      {ballTab}
-
-      <View style={{ flexDirection: "row", marginTop: 10, height: 40 }}>
-        <View
-          style={{
-            flex: 4,
-            backgroundColor: "#ededed",
-            marginLeft: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ paddingLeft: 10 }}>total</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-          }}
-        >
-          <Text></Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{totalQte}</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "#ededed",
-            marginRight: 10,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center" }}>{totalCmd}€</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, marginTop: 30 }}>
-        <CreditCardInput
-          placeholderColor={"silver"}
-          placeholders={{
-            number: "1234 5678 1234 5678",
-            expiry: "MM/YY",
-            cvc: "CVC",
-            name: "NOM",
-          }}
-          labels={{
-            number: "N° DE CARTE",
-            expiry: "EXP",
-            cvc: "CVC",
-            name: "NOM",
-            brand: "VISA",
-          }}
-          // cardImageFront={require("../assets/homePage.jpeg")}
-
-          requiresName
-          onChange={(e) => setCardData(e)}
-        />
-      </View>
-      <Button
-        title="Paiement"
-        containerStyle={{
-          alignItems: "center",
-          marginTop: 20,
-          marginBottom: 20,
-        }}
-        buttonStyle={{ backgroundColor: "orange" }}
-        onPress={() => stripeClick()}
-      ></Button>
-     </View>
     </ScrollView>
   );
 }

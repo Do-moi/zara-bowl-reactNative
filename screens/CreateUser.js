@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Menu from "./Menu";
@@ -22,9 +23,10 @@ import {
 } from "react-native-elements";
 import { connect } from "react-redux";
 
-function CreateUser({ navigation, saveToken, saveUserProfil}) {
+function CreateUser({ navigation, saveToken, saveUserProfil }) {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [adresse, setAdresse] = useState("");
   const [postal, setPostal] = useState("");
   const [ville, setVille] = useState("");
@@ -33,34 +35,53 @@ function CreateUser({ navigation, saveToken, saveUserProfil}) {
 
   const [userExist, setUserExist] = useState("");
 
-  var handleSubmitSignUp = async (
-    nom,
-    prenom,
-    email,
-    password,
-    adresse,
-    ville,
-    postal
-  ) => {
-    console.log("=======signUP");
+  var handleSubmitSignUp = async () => {
+    // for (var i = 0; i < telephone.length; i++) {
+    //   console.log("===============telephone====", telephone[i]);
+    //   if (
+    //     telephone[i] == 1 ||
+    //     telephone[i] == 2 ||
+    //     telephone[i] == 3 ||
+    //     telephone[i] == 4 ||
+    //     telephone[i] == 5 ||
+    //     telephone[i] == 6 ||
+    //     telephone[i] == 7 ||
+    //     telephone[i] == 8 ||
+    //     telephone[i] == 9 ||
+    //     telephone[i] == 0
+    //   ) {
+    //     console.log("chiffre trouvé");
+    //   } else {
+    //     console.log("veuillez entrer des chiffres");
+    //   }
+    // }
+    // var regex = /[A-Za-z]/;
+    // var testNB = regex.test(telephone);
+
+    // console.log("============testNB", testNB);
+    // var regex1 = /[^A-Za-z0-9_]/;
+    // var testNB1 = regex1.test(telephone);
+
+    // console.log("============testNB1", testNB1);
+    // console.log("=======signUP");
     var reponse = await fetch("http://192.168.1.115:3000/sign-up", {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },
-      body: `nom=${nom}&prenom=${prenom}&email=${email}&password=${password}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
+      body: `nom=${nom}&prenom=${prenom}&telephone=${telephone}&email=${email}&password=${password}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
     });
 
     var reponseJson = await reponse.json();
     console.log(";;;;;;;;;;;;;;;;", reponseJson);
 
     if (reponseJson.reponseSave == false) {
-      console.log("=====if jsonresp false");
-      setUserExist("utilisateur déjà enregistré");
+      console.log("=====if jsonresp error", reponseJson.error);
+      setUserExist(reponseJson.error[0]);
     }
     if (reponseJson.reponseSave == true) {
       saveToken(reponseJson.userToken);
-      saveUserProfil(reponseJson.userSearch)
+      saveUserProfil(reponseJson.userSearch);
       console.log("=== saveToken=====", reponseJson.userToken);
-      console.log('========userSaveProfil',reponseJson.userSearch);
+      console.log("========userSaveProfil", reponseJson.userSearch);
 
       navigation.navigate("Profil");
     }
@@ -70,173 +91,108 @@ function CreateUser({ navigation, saveToken, saveUserProfil}) {
   // },[userExist])
   console.log("=============", userExist);
   return (
-    <ScrollView style={{ backgroundColor: "#08d9d6" }}>
-      <View style={styles.container}>
-        {/* <ImageBackground
-          source={require("../assets/fireball.jpg")}
-          style={{ width: "100%", height: 180, flex: 1 }}
-        ></ImageBackground> */}
-        <Text style={{ fontSize: 20, marginTop: 10 }}>INSCRIPTION</Text>
-        <Text style={{ fontSize: 20, color: "red" }}>{userExist}</Text>
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="NOM"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setNom(e)}
-        />
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="PRENOM"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setPrenom(e)}
-        />
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView style={{ backgroundColor: "white" }}>
+        <View style={styles.container}>
+          <Text style={{ fontSize: 20, marginTop: 20 }}>CREER UN COMPTE</Text>
+          <Text style={{ fontSize: 20, color: "red", textAlign: "center" }}>
+            {userExist}
+          </Text>
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="NOM"
+            style={styles.inputStyle}
+            onChangeText={(e) => setNom(e)}
+            value={nom}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="PRENOM"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPrenom(e)}
+            value={prenom}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="TELEPHONE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setTelephone(e)}
+            value={telephone}
+          />
 
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="EMAIL"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setEmail(e)}
-        />
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="mot de passe"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setPassword(e)}
-        />
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="ADRESSE"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setAdresse(e)}
-        />
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="CODE POSTAL"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setPostal(e)}
-        />
-        <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
-          placeholderTextColor="gray"
-          placeholder="VILLE"
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            height: 50,
-            width: "85%",
-            paddingLeft: 15,
-            marginTop: 10,
-            marginRight: 30,
-            marginBottom: 5,
-            marginLeft: 30,
-            fontSize: 18,
-            color: "gray",
-          }}
-          onChangeText={(e) => setVille(e)}
-        />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="EMAIL"
+            style={styles.inputStyle}
+            onChangeText={(e) => setEmail(e)}
+            value={email}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="MOT DE PASSE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPassword(e)}
+            value={password}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="ADRESSE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setAdresse(e)}
+            value={adresse}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="CODE POSTAL"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPostal(e)}
+            value={postal}
+          />
+          <TextInput
+            keyboardType="email-address" // a bit of extra love for your users
+            autoCapitalize="none" // React Native default is to capitalise
+            placeholderTextColor="gray"
+            placeholder="VILLE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setVille(e)}
+            value={ville}
+          />
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            marginTop: 30,
-            marginBottom: 30,
-          }}
-        >
-          <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              marginTop: 30,
+              marginBottom: 30,
+            }}
+          >
             <Button
-              title="Se connecter"
-              containerStyle={{ alignItems: "center" }}
+              title="VALIDER"
+              containerStyle={{ alignItems: "center", width: "85%" }}
               buttonStyle={{ backgroundColor: "orange" }}
+              titleStyle={{ color: "black", flex: 1 }}
               onPress={() =>
                 handleSubmitSignUp(
                   nom,
                   prenom,
+                  telephone,
                   email,
                   password,
                   adresse,
@@ -247,25 +203,40 @@ function CreateUser({ navigation, saveToken, saveUserProfil}) {
             ></Button>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4eeff",
+    backgroundColor: "white",
     alignItems: "center",
+  },
+  inputStyle: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderColor: "black",
+    borderWidth: 1,
+    height: 50,
+    width: "95%",
+    paddingLeft: 15,
+    marginTop: 10,
+    marginRight: 30,
+    marginBottom: 5,
+    marginLeft: 30,
+    fontSize: 18,
+    color: "black",
   },
 });
 function mapDispatchToProps(dispatch) {
   return {
     saveToken: function (token) {
-      dispatch({ type: "saveToken", token: token })
+      dispatch({ type: "saveToken", token: token });
     },
     saveUserProfil: function (userProfil) {
-      dispatch({ type: "saveProfil", userProfil: userProfil})
+      dispatch({ type: "saveProfil", userProfil: userProfil });
     },
   };
 }
