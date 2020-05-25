@@ -1,32 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Overlay,
-} from "react-native-elements";
-import Menu from "./Menu";
-import { Dropdown } from "react-native-material-dropdown";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { ListItem, Button, Overlay } from "react-native-elements";
+
 import { connect } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 
 function Profil({ navigation, token, userProfil, deconnexionClick }) {
   var tab = [];
-  // console.log("==========profil token", token);
-
-  // console.log("=======userProfil", userProfil);
 
   if (userProfil.commande) {
     tab = userProfil.commande;
@@ -34,37 +14,10 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
   const [isVisible, setIsVisible] = useState(false);
   const [cmdDesc, setCmdDesc] = useState({});
 
-  const [profilUser, setProfilUser] = useState({});
-
   function handleClick(ball) {
-    console.log("======handleClick", ball);
     setIsVisible(true);
     setCmdDesc(ball);
   }
-  var deleteProfil = async () => {
-    var deleteUser = await fetch(
-      `http://192.168.1.115:3000/deleteProfil?token=${token}`,
-      {
-        method: "DELETE",
-      }
-    );
-    var deleteJson = await deleteUser.json();
-    console.log("======================deleteJson====", deleteJson);
-    if (deleteJson.userDeleted == 1) {
-      deconnexionClick();
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            { name: "Profil" },
-            {
-              name: "Home",
-            },
-          ],
-        })
-      );
-    }
-  };
 
   var gallery = tab.map((ball, i) => {
     return (
@@ -83,7 +36,7 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
       </View>
     );
   });
-  // console.log("==============gallery", gallery);
+
   if (token) {
     var loged = (
       <View
@@ -109,21 +62,6 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
             onPress={() => navigation.navigate("UpdateUser")}
           ></Button>
         </View>
-        {/* 
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <Button
-            title="supprimer profil"
-            titleStyle={{ color: "black" }}
-            containerStyle={{
-              borderWidth: 1,
-              borderColor: "orange",
-              borderRadius: 5,
-              width: "80%",
-            }}
-            buttonStyle={{ backgroundColor: "orange" }}
-            onPress={() => deleteProfil()}
-          ></Button>
-        </View> */}
       </View>
     );
   }
@@ -157,11 +95,11 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
           </ScrollView>
         </Overlay>
 
-        <Text style={{ fontSize: 18, marginTop: 20, textAlign: "center" }}>
+        <Text style={{ fontSize: 18, marginTop: 60, textAlign: "center" }}>
           PROFIL
         </Text>
 
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ flex: 1, flexDirection: "row", marginTop: 10 }}>
           <Text style={{ flex: 2, marginLeft: 10, fontWeight: "bold" }}>
             nom:
           </Text>
@@ -208,7 +146,7 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
         <Text
           style={{
             fontSize: 18,
-            marginTop: 20,
+            marginTop: 10,
             marginBottom: 20,
           }}
         >

@@ -1,16 +1,9 @@
 console.disableYellowBox = true;
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableHighlight,
-} from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import { StyleSheet, TouchableHighlight } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
+
 import Basket from "./screens/Basket";
 import Confirm from "./screens/Confirm";
 import Connexion from "./screens/Connexion";
@@ -22,35 +15,30 @@ import UpdateUser from "./screens/UpdateUser";
 import Recapitulatif from "./screens/Recapitulatif";
 import Search from "./screens/Search";
 import Paiement from "./screens/Stripe";
-import Deconnexion from "./screens/Deconnexion";
+import LogoTitle from "./screens/LogoTitle";
 import { createStackNavigator } from "@react-navigation/stack";
 import DrawerContent from "./screens/DrawerContent";
 
-import {
-  NavigationContainer,
-  DrawerActions,
-  CommonActions,
-  useNavigation,
-} from "@react-navigation/native";
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from "@react-navigation/drawer";
+import { NavigationContainer, DrawerActions } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
+import listBalls from "./reducers/balls";
 import panier from "./reducers/panier";
 import token from "./reducers/token";
 import userProfil from "./reducers/userProfil";
+
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
-const store = createStore(combineReducers({ panier, token, userProfil }));
+
+const store = createStore(
+  combineReducers({ panier, token, userProfil, listBalls })
+);
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
 const ConnexionStack = createStackNavigator();
 const BasketStack = createStackNavigator();
 const ProfilStack = createStackNavigator();
-const DeconnexionStack = createStackNavigator();
 
 function HomeStackScreen({ navigation }) {
   return (
@@ -60,7 +48,7 @@ function HomeStackScreen({ navigation }) {
         component={Home}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -79,7 +67,7 @@ function HomeStackScreen({ navigation }) {
         component={Search}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -90,7 +78,7 @@ function HomeStackScreen({ navigation }) {
         component={Details}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -101,7 +89,7 @@ function HomeStackScreen({ navigation }) {
         component={Basket}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -114,7 +102,7 @@ function HomeStackScreen({ navigation }) {
         component={Recapitulatif}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -130,14 +118,13 @@ function HomeStackScreen({ navigation }) {
         component={Confirm}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
           headerLeft: null,
         }}
       />
-      {/* <HomeStack.Screen name="Basket" component={Basket} /> */}
     </HomeStack.Navigator>
   );
 }
@@ -150,7 +137,7 @@ function ConnexionStackScreen({ navigation }) {
         component={Connexion}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -171,7 +158,7 @@ function ConnexionStackScreen({ navigation }) {
         component={CreateUser}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -182,7 +169,7 @@ function ConnexionStackScreen({ navigation }) {
         component={Profil}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -194,17 +181,16 @@ function ConnexionStackScreen({ navigation }) {
         component={UpdateUser}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
-          headerLeft: null,
         }}
       />
     </ConnexionStack.Navigator>
   );
 }
-function BasketStackScreen({ navigation }) {
+function BasketStackScreen() {
   return (
     <BasketStack.Navigator>
       <BasketStack.Screen
@@ -212,7 +198,7 @@ function BasketStackScreen({ navigation }) {
         component={Basket}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
@@ -222,7 +208,7 @@ function BasketStackScreen({ navigation }) {
     </BasketStack.Navigator>
   );
 }
-function ProfilStackScreen({ navigation }) {
+function ProfilStackScreen() {
   return (
     <ProfilStack.Navigator>
       <ProfilStack.Screen
@@ -230,31 +216,13 @@ function ProfilStackScreen({ navigation }) {
         component={Profil}
         options={{
           headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
+          headerTitle: (props) => <LogoTitle {...props} />,
           headerTintColor: "black",
           headerTitleStyle: { fontWeight: "bold" },
           headerTitleAlign: "center",
         }}
       />
     </ProfilStack.Navigator>
-  );
-}
-
-function deconnexionStackScreen({ navigation }) {
-  return (
-    <DeconnexionStack.Navigator>
-      <DeconnexionStack.Screen
-        name="deconnexion"
-        component={Deconnexion}
-        options={{
-          headerStyle: styles.headerStyle,
-          title: "ZARA BOWL",
-          headerTintColor: "black",
-          headerTitleStyle: { fontWeight: "bold" },
-          headerTitleAlign: "center",
-        }}
-      />
-    </DeconnexionStack.Navigator>
   );
 }
 
@@ -265,14 +233,13 @@ function MyDrawer() {
       <Drawer.Screen name="Panier" component={BasketStackScreen} />
       <Drawer.Screen name="Connexion" component={ConnexionStackScreen} />
       <Drawer.Screen name="Profil" component={ProfilStackScreen} />
-      <Drawer.Screen name="Deconnexion" component={deconnexionStackScreen} />
     </Drawer.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
   headerStyle: {
-    backgroundColor: "#FF9F1C",
+    backgroundColor: "#ffa500",
   },
 });
 export default function App() {

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import HttpLocal from "../Keyhttp/KeyLocal";
+import HttpHeroku from "../Keyhttp/KeyHeroku";
 import {
   StyleSheet,
   Text,
@@ -6,18 +8,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import {
-  CreditCardInput,
-  LiteCreditCardInput,
-} from "react-native-credit-card-input";
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Overlay,
-} from "react-native-elements";
+import { CreditCardInput } from "react-native-credit-card-input";
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 var stripe = require("stripe-client")(
   "pk_test_ogc5L6lv4iWj8N1lPlGd3wKl00TpkY2uur"
@@ -30,15 +22,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
   const { adresse } = route.params;
   const { postal } = route.params;
   const { ville } = route.params;
-  console.log(
-    "=======params stripe",
-    nom,
-    prenom,
-    telephone,
-    adresse,
-    postal,
-    ville
-  );
+
   const [cardData, setCardData] = useState({ valid: false });
   const [erreur, setErreur] = useState("");
   var totalCmd = 0;
@@ -113,8 +97,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
     );
   });
 
-  async function stripeClick({ navigation }) {
-    console.log("=========cardData==============", cardData);
+  var stripeClick = async () => {
     var error = [];
     if (cardData.valid == false) {
       error.push("carte invalide");
@@ -134,8 +117,6 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
         },
       };
 
-      // console.log("=============", moisExp[1]);
-
       var carte = await stripe.createToken(information);
       var token = carte.id;
 
@@ -152,9 +133,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
         { ball: ball },
       ];
 
-      // console.log("===========================", commandeId);
-
-      var response = await fetch(`http://192.168.1.115:3000/commande`, {
+      var response = await fetch(`${HttpLocal}/commande`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, commandeId }),
@@ -164,8 +143,6 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
         })
         .then((data) => {
           if (data.success === true) {
-            console.log("+===========data.success", data.success);
-
             navigation.navigate("Confirm", {
               nom: nom,
               prenom: prenom,
@@ -183,25 +160,27 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
         });
     }
     setErreur(error[0]);
-  }
+  };
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
-        <Text style={{ marginTop: 50, marginBottom: 30 }}>PAIEMENT</Text>
+        <Text style={{ marginTop: 50, marginBottom: 30, fontSize: 18 }}>
+          PAIEMENT
+        </Text>
 
         <View
           style={{
             flexDirection: "row",
             height: 40,
             borderRadius: 5,
-            backgroundColor: "orange",
+            backgroundColor: "#ffa500",
             width: "95%",
           }}
         >
           <View
             style={{
               flex: 4,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               marginLeft: 10,
               justifyContent: "center",
               borderRadius: 5,
@@ -213,7 +192,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
             }}
           >
@@ -223,7 +202,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -234,7 +213,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
               marginRight: 10,
             }}
@@ -314,8 +293,6 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
               name: "NOM",
               brand: "VISA",
             }}
-            // cardImageFront={require("../assets/homePage.jpeg")}
-
             requiresName
             onChange={(e) => setCardData(e)}
           />
@@ -326,10 +303,9 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
           containerStyle={{
             alignItems: "center",
             marginTop: 20,
-
             width: "85%",
           }}
-          buttonStyle={{ backgroundColor: "orange" }}
+          buttonStyle={{ backgroundColor: "#ffa500" }}
           titleStyle={{ flex: 1, color: "black" }}
           onPress={() => stripeClick()}
         ></Button>
@@ -344,9 +320,9 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
           buttonStyle={{
             backgroundColor: "white",
             borderWidth: 1,
-            borderColor: "orange",
+            borderColor: "#ffa500",
           }}
-          titleStyle={{ flex: 1, color: "orange" }}
+          titleStyle={{ flex: 1, color: "#ffa500" }}
           onPress={() => navigation.navigate("Home")}
         ></Button>
       </View>

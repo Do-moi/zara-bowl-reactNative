@@ -1,37 +1,27 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
-import { Image } from "react-native-elements";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 import { FontAwesome } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-} from "react-native-paper";
+import { Drawer, Text } from "react-native-paper";
 import { Overlay } from "react-native-elements";
 import { connect } from "react-redux";
 
 function DrawerContent(props) {
   const [isVisible, setIsVisible] = useState(false);
-  console.log("============props.userProfil", props.userProfil.prenom);
+
   var prenom = (
-    <Text style={{ color: "white", fontSize: 30 }}>
-      bonjour {props.userProfil.prenom}
+    <Text style={{ color: "white", fontSize: 22 }}>
+      Bonjour {props.userProfil.prenom}
     </Text>
   );
   if (props.token == "") {
     var logoConnexion = (
       <DrawerItem
-        icon={({ color, size }) => (
-          <FontAwesome name="sign-in" size={20} style={{ color: "orange" }} />
+        icon={() => (
+          <FontAwesome name="sign-in" size={20} style={{ color: "#ffa500" }} />
         )}
-        label="connexion"
+        label="Connexion"
         labelStyle={{ marginLeft: 2 }}
         onPress={() => {
           props.navigation.navigate("Connexion");
@@ -43,11 +33,11 @@ function DrawerContent(props) {
     var loguer = (
       <View>
         <DrawerItem
-          icon={({ color, size }) => (
+          icon={() => (
             <FontAwesome
               name="shopping-basket"
               size={15}
-              style={{ color: "orange" }}
+              style={{ color: "#ffa500" }}
             />
           )}
           label="Panier"
@@ -57,7 +47,7 @@ function DrawerContent(props) {
           }}
         />
         <DrawerItem
-          icon={({ color, size }) => (
+          icon={() => (
             <FontAwesome name="user" size={22} style={{ color: "orange" }} />
           )}
           label="Profil"
@@ -68,11 +58,11 @@ function DrawerContent(props) {
         />
 
         <DrawerItem
-          icon={({ color, size }) => (
+          icon={() => (
             <FontAwesome
               name="sign-out"
               size={20}
-              style={{ color: "orange" }}
+              style={{ color: "#ffa500" }}
             />
           )}
           label="Déconnexion"
@@ -97,11 +87,11 @@ function DrawerContent(props) {
             CONTACT
           </Text>
           <Text style={{ marginTop: 30 }}>ZARA BOWL</Text>
-          <Text style={{ marginTop: 0 }}>5 rue de la ferme</Text>
-          <Text style={{ marginTop: 0 }}>75010</Text>
-          <Text style={{ marginTop: 0 }}>PARIS</Text>
-          <Text style={{ marginTop: 0 }}>tel: 0645454545</Text>
-          <Text style={{ marginTop: 0 }}>mail: Zarabowl@gmail.fr</Text>
+          <Text>5 rue de Paris</Text>
+          <Text>75010</Text>
+          <Text>PARIS</Text>
+          <Text>tel: 0645454545</Text>
+          <Text>mail: Zarabowl@gmail.fr</Text>
         </View>
       </Overlay>
       <ImageBackground
@@ -120,36 +110,23 @@ function DrawerContent(props) {
       <DrawerContentScrollView {...props}>
         <Drawer.Section>
           <DrawerItem
-            icon={({ color, size }) => (
-              <FontAwesome name="home" size={20} style={{ color: "orange" }} />
+            icon={() => (
+              <FontAwesome name="home" size={20} style={{ color: "#ffa500" }} />
             )}
-            label="home"
+            label="Home"
             labelStyle={{ marginLeft: 2 }}
             onPress={() => {
               props.navigation.navigate("Home");
             }}
           />
           {logoConnexion}
-          {/* <DrawerItem
-            icon={({ color, size }) => (
-              <FontAwesome
-                name="sign-in"
-                size={20}
-                style={{ color: "orange" }}
-              />
-            )}
-            label="connexion"
-            labelStyle={{ marginLeft: 2 }}
-            onPress={() => {
-              props.navigation.navigate("Connexion");
-            }}
-          /> */}
+
           <DrawerItem
             icon={() => (
               <FontAwesome
                 name="envelope"
                 size={16}
-                style={{ color: "orange" }}
+                style={{ color: "#ffa500" }}
               />
             )}
             label="Contact"
@@ -159,62 +136,7 @@ function DrawerContent(props) {
             }}
           />
           {loguer}
-          {/* 
-          <DrawerItem
-            icon={({ color, size }) => (
-              <FontAwesome
-                name="shopping-basket"
-                size={15}
-                style={{ color: "orange" }}
-              />
-            )}
-            label="Panier"
-            labelStyle={{ marginLeft: 2 }}
-            onPress={() => {
-              props.navigation.navigate("Panier");
-            }}
-          /> */}
-          {/* <DrawerItem
-            icon={({ color, size }) => (
-              <FontAwesome name="user" size={22} style={{ color: "orange" }} />
-            )}
-            label="Profil"
-            labelStyle={{ marginLeft: 3 }}
-            onPress={() => {
-              props.navigation.navigate("Profil");
-            }}
-          />
-          <DrawerItem
-            icon={() => (
-              <FontAwesome
-                name="envelope"
-                size={16}
-                style={{ color: "orange" }}
-              />
-            )}
-            label="Contact"
-            labelStyle={{ marginLeft: 2 }}
-            onPress={() => {
-              setIsVisible(!isVisible);
-            }}
-          />
-          <DrawerItem
-            icon={({ color, size }) => (
-              <FontAwesome
-                name="sign-out"
-                size={20}
-                style={{ color: "orange" }}
-              />
-            )}
-            label="Déconnexion"
-            labelStyle={{ marginLeft: 0 }}
-            onPress={() => {
-              props.deconnexionClick();
-            }}
-          /> */}
         </Drawer.Section>
-
-        <View></View>
       </DrawerContentScrollView>
     </View>
   );

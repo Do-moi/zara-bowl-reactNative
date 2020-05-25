@@ -1,17 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  CreditCardInput,
-  LiteCreditCardInput,
-} from "react-native-credit-card-input";
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Overlay,
-} from "react-native-elements";
+
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -83,7 +73,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
-        <Text style={{ marginTop: 20, marginBottom: 10 }}>
+        <Text style={{ marginTop: 60, marginBottom: 10, fontSize: 18 }}>
           Confirmation de paiement
         </Text>
 
@@ -91,7 +81,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
           <View
             style={{
               flex: 4,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               marginLeft: 10,
               justifyContent: "center",
             }}
@@ -102,7 +92,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
             }}
           >
@@ -112,7 +102,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -123,7 +113,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
               marginRight: 10,
             }}
@@ -152,9 +142,7 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
               backgroundColor: "white",
               justifyContent: "center",
             }}
-          >
-            <Text></Text>
-          </View>
+          ></View>
 
           <View
             style={{
@@ -197,11 +185,11 @@ function Confirm({ navigation, route, ball, deleteBasketClick }) {
             votre colis.
           </Text>
         </View>
-        <View style={{ flex: 1, marginTop: 20, marginBottom: 40 }}>
+        <View style={{ flex: 1, marginTop: 40, marginBottom: 20 }}>
           <Button
             title="Retour à l'accueil"
             containerStyle={{ alignItems: "center", width: "85%" }}
-            buttonStyle={{ backgroundColor: "orange" }}
+            buttonStyle={{ backgroundColor: "#ffa500" }}
             titleStyle={{ color: "black", flex: 1 }}
             onPress={() => {
               navigation.navigate("Home");
@@ -231,7 +219,7 @@ const styles = StyleSheet.create({
     margin: 0,
     borderRadius: 5,
     width: "95%",
-    backgroundColor: "orange",
+    backgroundColor: "#ffa500",
   },
   divstyle: {
     flex: 1,
@@ -239,7 +227,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 40,
     borderWidth: 1,
-    borderColor: "orange",
+    borderColor: "#ffa500",
     borderStyle: "solid",
     margin: 0,
     borderRadius: 5,

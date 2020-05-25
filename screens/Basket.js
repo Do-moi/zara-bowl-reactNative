@@ -5,32 +5,19 @@ import {
   View,
   ScrollView,
   ImageBackground,
-  Image,
   TouchableOpacity,
-  RecyclerViewBackedScrollView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from "react-redux";
 
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Badge,
-} from "react-native-elements";
+import { Button } from "react-native-elements";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
 function Basket({ navigation, ball, deleteClick, token }) {
-  console.log("==========basket", ball);
-  console.log("=======token", token);
   const [error, setError] = useState("");
-
-  console.log("=======tokenFind", token);
 
   useEffect(() => {
     setError(null);
@@ -123,19 +110,13 @@ function Basket({ navigation, ball, deleteClick, token }) {
       navigation.navigate("Connexion");
     } else {
       setError(null);
-      navigation.navigate("Recapitulatif", {
-        message: "veuillez vous connecter ou vous inscrire!",
-      });
+      navigation.navigate("Recapitulatif");
     }
   }
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.container}>
-        {/* <ImageBackground
-          source={require("../assets/fireball.jpg")}
-          style={{ width: "100%", height: 180 }}
-        ></ImageBackground> */}
         <View style={{ width: "100%", height: hp("30%") }}>
           <ImageBackground
             source={require("../assets/fireball.jpg")}
@@ -153,18 +134,18 @@ function Basket({ navigation, ball, deleteClick, token }) {
             marginTop: 10,
             height: 40,
             borderWidth: 1,
-            borderColor: "orange",
+            borderColor: "#ffa500",
             borderStyle: "solid",
             margin: 0,
             borderRadius: 5,
             width: "95%",
-            backgroundColor: "orange",
+            backgroundColor: "#ffa500",
           }}
         >
           <View
             style={{
               flex: 3,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               marginLeft: 0,
               justifyContent: "center",
               borderRadius: 5,
@@ -176,7 +157,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
             }}
           >
@@ -186,7 +167,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -197,7 +178,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               justifyContent: "center",
             }}
           >
@@ -207,7 +188,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View
             style={{
               flex: 1,
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
               marginRight: 0,
               justifyContent: "center",
               borderRadius: 5,
@@ -241,7 +222,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
           <View style={{ flex: 1, alignItems: "center" }}>
             <Button
               title="retour accueil"
-              titleStyle={{ color: "orange" }}
+              titleStyle={{ color: "#ffa500" }}
               containerStyle={{
                 alignItems: "center",
                 borderWidth: 1,
@@ -260,11 +241,11 @@ function Basket({ navigation, ball, deleteClick, token }) {
               titleStyle={{ color: "black" }}
               containerStyle={{
                 borderWidth: 1,
-                borderColor: "orange",
+                borderColor: "#ffa500",
                 borderRadius: 5,
                 width: "80%",
               }}
-              buttonStyle={{ backgroundColor: "orange" }}
+              buttonStyle={{ backgroundColor: "#ffa500" }}
               onPress={() => emptyBasket()}
             ></Button>
           </View>

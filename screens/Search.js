@@ -7,32 +7,33 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-export default function Search({ navigation, route }) {
+import { connect } from "react-redux";
+
+function Search({ navigation, route, listBalls }) {
   const { brand } = route.params;
-  var newBrand = JSON.stringify(brand);
+
   const [balls, setBalls] = useState([]);
-  const [marque, setMarque] = useState("");
-  // setMarque(brand);
+
   useEffect(() => {
-    const findApi = async () => {
-      var rep = await fetch(`http://192.168.1.115:3000/search?name=${brand}`);
-      var jsonRep = await rep.json();
-      setBalls(jsonRep.response.list);
-    };
-    findApi();
+    listBalls.map((marque, i) => {
+      if (marque.brand == brand) {
+        setBalls([...marque.list]);
+      }
+    });
   }, [brand]);
-  console.log("===========brand", brand);
+
   var galleryPhoto = balls.map((ball, i) => {
     return (
-      <View style={{ height: 70 }}>
+      <View style={{ height: hp("11%") }}>
         <ListItem
           key={i}
           leftAvatar={{ source: { uri: ball.img } }}
           title={ball.name}
           rightSubtitle={ball.price + "€"}
           topDivider
+          bottomDivider
           chevron
-          containerStyle={{ backgroundColor: "white" }}
+          containerStyle={{ backgroundColor: "white", height: "100%" }}
           onPress={() =>
             navigation.navigate("Details", {
               name: ball.name,
@@ -60,26 +61,28 @@ export default function Search({ navigation, route }) {
     );
   });
 
-  console.log("==================params", newBrand, brand);
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <View style={styles.container}>
-        <View style={{ width: "100%", height: hp("30%") }}>
-          <ImageBackground
-            source={require("../assets/fireball.jpg")}
-            style={{ width: "100%", height: "100%", resizeMode: "cover" }}
-          ></ImageBackground>
-        </View>
-
-        {galleryPhoto}
+    <View style={styles.container}>
+      <View style={{ width: wp("100%"), height: hp("30%") }}>
+        <ImageBackground
+          source={require("../assets/fireball.jpg")}
+          style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+        ></ImageBackground>
       </View>
-    </ScrollView>
+
+      {galleryPhoto}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
     backgroundColor: "white",
   },
 });
+var mapStateToProps = (state) => {
+  return { listBalls: state.listBalls };
+};
+export default connect(mapStateToProps, null)(Search);

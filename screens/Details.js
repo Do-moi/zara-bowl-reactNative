@@ -50,7 +50,6 @@ function Details({ navigation, route, saveBasketClick }) {
     { value: "3" },
     { value: "4" },
     { value: "5" },
-    { value: "6" },
   ];
   useEffect(() => {
     setError("");
@@ -67,186 +66,194 @@ function Details({ navigation, route, saveBasketClick }) {
     }
   }
 
-  // console.log("============ img", img);
-  // console.log("============the quantité", theQuantite);
-
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <View style={styles.container}>
-        <Overlay
-          isVisible={isVisible}
-          onBackdropPress={() => setIsVisible(false)}
-        >
-          <ScrollView>
-            <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-              Description
-            </Text>
-            <Text style={{ marginTop: 20 }}>{desc}</Text>
-          </ScrollView>
-        </Overlay>
+    <View style={styles.container}>
+      <Overlay
+        isVisible={isVisible}
+        onBackdropPress={() => setIsVisible(false)}
+      >
+        <ScrollView>
+          <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+            Description
+          </Text>
+          <Text style={{ marginTop: 20 }}>{desc}</Text>
+        </ScrollView>
+      </Overlay>
 
-        <Overlay isVisible={visible} onBackdropPress={() => setVisible(false)}>
-          <ScrollView>
-            <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-              caractéristique
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 20 }}>
-              Type de noyau: <Text style={{ color: "black" }}>{core}</Text>
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Type de surface: {coverstock}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Potentiel de flare: {flare}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Performance: {performance}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Conditions d'huiles recommandées: {condition}{" "}
-            </Text>
+      <Overlay isVisible={visible} onBackdropPress={() => setVisible(false)}>
+        <ScrollView>
+          <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+            caractéristique
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 20 }}>
+            Type de noyau: <Text style={{ color: "black" }}>{core}</Text>
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Type de surface: {coverstock}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Potentiel de flare: {flare}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Performance: {performance}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Conditions d'huiles recommandées: {condition}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Couleur: {color}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Différentiel: {differential}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Finition en usine: {finish}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Différentiel de bias de masse: {masse_bias}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Rayon de giration: {rg}{" "}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Type de réaction: {reaction}
+          </Text>
+          <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+            Date de sortie: {date}{" "}
+          </Text>
+        </ScrollView>
+      </Overlay>
 
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Différentiel: {differential}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Finition en usine: {finish}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Différentiel de bias de masse: {masse_bias}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Rayon de giration: {rg}{" "}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Type de réaction: {reaction}
-            </Text>
-            <Text style={{ fontWeight: "bold", marginTop: 10 }}>
-              Date de sortie: {date}{" "}
-            </Text>
-          </ScrollView>
-        </Overlay>
+      <Text
+        style={{
+          fontSize: 18,
+          marginTop: hp("10%"),
+          color: "#2484f2",
+        }}
+      >
+        {brand} {name}
+      </Text>
 
-        <Text
-          style={{
-            fontSize: 25,
-            marginTop: 20,
-            color: "#2484f2",
-          }}
-        >
-          {brand} {name}
-        </Text>
-
-        <View style={{ flex: 1, flexDirection: "row", marginTop: 30 }}>
-          <View
-            style={{ flex: 1, width: 150, height: 100, alignItems: "center" }}
-          >
-            <Image
-              style={{ width: 150, height: 150, marginLeft: 10 }}
-              resizeMode={"cover"}
-              source={{ uri: img }}
-            />
-            <Button
-              title="Description"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "white" }}
-              onPress={() => setIsVisible(true)}
-              titleStyle={{ color: "black" }}
-            ></Button>
-            <Dropdown
-              label="poids"
-              data={poids}
-              pickerStyle={{ borderBottomColor: "orange", borderWidth: 1 }}
-              dropdownOffset={{ top: 0, left: 10 }}
-              textColor="black"
-              baseColor="black"
-              containerStyle={styles.dropdown}
-              onChangeText={(value) => {
-                setThePoids(value);
-              }}
-            />
-          </View>
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Image
-              style={{ width: 150, height: 150, marginRight: 10 }}
-              resizeMode={"cover"}
-              source={{ uri: imgCore }}
-            />
-            <Button
-              title="Caractéristique"
-              containerStyle={{ alignItems: "center" }}
-              buttonStyle={{ backgroundColor: "white" }}
-              onPress={() => setVisible(true)}
-              titleStyle={{ color: "black" }}
-            ></Button>
-            <Dropdown
-              label="quantité"
-              data={quantite}
-              dropdownOffset={{ top: 0, left: 10 }}
-              textColor="black"
-              baseColor="black"
-              containerStyle={styles.dropdown}
-              onChangeText={(value) => {
-                setTheQuantite(value);
-              }}
-            />
-          </View>
-        </View>
-
-        <Text
-          style={{
-            color: "red",
-            fontSize: 15,
-            marginTop: 15,
-            textAlign: "center",
-          }}
-        >
-          {error}
-        </Text>
+      <View
+        style={{
+          flex: 1,
+          height: 200,
+          width: "100%",
+          flexDirection: "row",
+          marginTop: 20,
+        }}
+      >
         <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            marginTop: 10,
-            marginBottom: 10,
-          }}
+          style={{ flex: 1, width: "100%", height: 100, alignItems: "center" }}
         >
-          <View style={{ flex: 1, marginTop: 10, width: "100%" }}>
-            <Button
-              title="ajouter panier"
-              containerStyle={{ alignItems: "center", width: "85%" }}
-              buttonStyle={{ backgroundColor: "orange" }}
-              onPress={() => addBasketClick()}
-              titleStyle={{ color: "black", flex: 1 }}
-            ></Button>
-          </View>
-
-          <View style={{ flex: 1, marginTop: 10 }}>
-            <Button
-              title="retour accueil"
-              containerStyle={{
-                alignItems: "center",
-                borderColor: "orange",
-                borderWidth: 1,
-                borderRadius: 5,
-              }}
-              buttonStyle={{ backgroundColor: "white" }}
-              onPress={() => navigation.navigate("Home")}
-              titleStyle={{ color: "orange", flex: 1 }}
-            ></Button>
-          </View>
+          <Image
+            style={{ width: 150, height: 150, marginLeft: 10 }}
+            resizeMode={"cover"}
+            source={{ uri: img }}
+          />
+          <Button
+            title="Description"
+            containerStyle={{ alignItems: "center" }}
+            buttonStyle={{ backgroundColor: "white" }}
+            onPress={() => setIsVisible(true)}
+            titleStyle={{ color: "black" }}
+          ></Button>
+          <Dropdown
+            label="poids"
+            data={poids}
+            pickerStyle={{ borderBottomColor: "orange", borderWidth: 1 }}
+            dropdownOffset={{ top: 0, left: 10 }}
+            textColor="black"
+            baseColor="black"
+            containerStyle={styles.dropdown}
+            onChangeText={(value) => {
+              setThePoids(value);
+            }}
+          />
+        </View>
+        <View style={{ flex: 1, alignItems: "center" }}>
+          <Image
+            style={{ width: 150, height: 150, marginRight: 10 }}
+            resizeMode={"cover"}
+            source={{ uri: imgCore }}
+          />
+          <Button
+            title="Caractéristique"
+            containerStyle={{ alignItems: "center" }}
+            buttonStyle={{ backgroundColor: "white" }}
+            onPress={() => setVisible(true)}
+            titleStyle={{ color: "black" }}
+          ></Button>
+          <Dropdown
+            label="quantité"
+            data={quantite}
+            dropdownOffset={{ top: 0, left: 10 }}
+            textColor="black"
+            baseColor="black"
+            containerStyle={styles.dropdown}
+            onChangeText={(value) => {
+              setTheQuantite(value);
+            }}
+          />
         </View>
       </View>
-    </ScrollView>
+
+      <Text
+        style={{
+          color: "red",
+          fontSize: 18,
+          marginTop: 10,
+          marginBottom: 10,
+          textAlign: "center",
+        }}
+      >
+        {error}
+      </Text>
+      <View
+        style={{
+          width: "100%",
+          alignItems: "center",
+          marginTop: 1,
+        }}
+      >
+        <Button
+          title="ajouter panier"
+          containerStyle={{
+            alignItems: "center",
+            width: "85%",
+            marginBottom: 10,
+          }}
+          buttonStyle={{ backgroundColor: "#ffa500" }}
+          onPress={() => addBasketClick()}
+          titleStyle={{ color: "black", flex: 1 }}
+        ></Button>
+
+        <Button
+          title="retour accueil"
+          containerStyle={{
+            alignItems: "center",
+            borderColor: "#ffa500",
+            borderWidth: 1,
+            width: "85%",
+            borderRadius: 5,
+            marginBottom: 30,
+          }}
+          buttonStyle={{ backgroundColor: "white" }}
+          onPress={() => navigation.navigate("Home")}
+          titleStyle={{ color: "#ffa500", flex: 1 }}
+        ></Button>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: hp("100%"),
     backgroundColor: "white",
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   dropdown: {
     width: "60%",

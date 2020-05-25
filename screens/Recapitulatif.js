@@ -4,25 +4,13 @@ import {
   Text,
   View,
   ScrollView,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Overlay,
-} from "react-native-elements";
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 
 function Recapitulatif({ navigation, ball }) {
-  console.log("===========page recap", ball);
-
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -32,6 +20,25 @@ function Recapitulatif({ navigation, ball }) {
   const [error, setError] = useState("");
 
   function shipping() {
+    var listError = [];
+    // ==================================test nom======================================================
+    var testNomCaractere = false;
+    var testNomLettre = false;
+    var nomNB = false;
+    // ==================================test prenom=======================================================
+    var testPrenomCaractere = false;
+    var testPrenomLettre = false;
+    var testPrenomNb = false;
+    // ===================================test telephone===============================================
+    var telephoneLetter = false;
+    var telCt = false;
+    // ==================================test postal=======================================================
+    var testPostalCaracters = false;
+    var testPostalLetter = false;
+    // ==================================test ville==========================================================
+    var testVilleCaracters = false;
+    var testVilleNB = false;
+    // ===================================condition champs vides===========================================
     if (
       nom == "" ||
       prenom == "" ||
@@ -40,8 +47,143 @@ function Recapitulatif({ navigation, ball }) {
       postal == "" ||
       ville == ""
     ) {
-      setError("veuillez remplir l'adresse de livraison");
-    } else {
+      listError.push("veuillez remplir l'adresse de livraison");
+    }
+    // ============================condition nom====================================
+    var regexNom = /[^A-Za-z0-9_]/;
+    var testNom = regexNom.test(nom);
+
+    if (testNom == true) {
+      testNomCaractere = true;
+    }
+    var regexNom1 = /[0-9]/;
+    var testNom1 = regexNom1.test(nom);
+
+    if (testNom1 == true) {
+      nomNB = true;
+    }
+
+    var regexNom2 = /[A-Za-z]/;
+    var testNom2 = regexNom2.test(nom);
+    if (testNom2 == true) {
+      testNomLettre = true;
+    }
+    if (nom.length < 2) {
+      listError.push("le nom doit comporter au moins 2 lettres");
+    }
+
+    if (testNomCaractere == true || nomNB == true || testNomLettre == false) {
+      listError.push("le nom doit comporter que des lettres");
+    }
+    // ============================condition prenom==========================================
+
+    var regexPrenom = /[^A-Za-z0-9_]/;
+    var testPrenom = regexPrenom.test(prenom);
+
+    if (testPrenom == true) {
+      testPrenomCaractere = true;
+    }
+    var regexPrenom1 = /[0-9]/;
+    var testPrenom1 = regexPrenom1.test(prenom);
+
+    if (testPrenom1 == true) {
+      testPrenomNb = true;
+    }
+
+    var regexPrenom2 = /[A-Za-z]/;
+    var testPrenom2 = regexPrenom2.test(prenom);
+
+    if (testPrenom2 == true) {
+      testPrenomLettre = true;
+    }
+    if (prenom.length < 2) {
+      listError.push("le prenom doit comporter au moins 2 lettres");
+    }
+
+    if (
+      testPrenomCaractere == true ||
+      testPrenomNb == true ||
+      testPrenomLettre == false
+    ) {
+      listError.push("le prenom doit comporter que des lettres");
+    }
+
+    // ==============================================condition numero telephone==========================
+
+    if (telephone.length != 10) {
+      listError.push("le numéro de téléphone doit comporter 10 chiffres");
+    }
+    var regexLetter = /[A-Za-z]/;
+    var testLetter = regexLetter.test(telephone);
+
+    if (testLetter == true) {
+      telephoneLetter = true;
+    }
+
+    var regexCt = /[^A-Za-z0-9_]/;
+    var testCt = regexCt.test(telephone);
+
+    if (testCt == true) {
+      telCt = true;
+    }
+
+    if (telephoneLetter == true) {
+      listError.push("le numéro de téléphone doit contenir que des chiffres");
+    }
+    if (telCt == true) {
+      listError.push("le numéro de téléphone doit contenir que des chiffres");
+    }
+    // ========================================condition adresse===============================
+
+    if (adresse.length < 8) {
+      listError.push("l'adresse doit avoir au moins 8 caractères");
+    }
+    //===========================================condition code postal===============================
+
+    if (postal.length != 5) {
+      listError.push("code postal incorrect");
+    }
+    var regexPostalCt = /[^A-Za-z0-9_]/;
+    var testPostalCt = regexPostalCt.test(postal);
+
+    if (testPostalCt == true) {
+      testPostalCaracters = true;
+    }
+    var regexPostalLetter = /[A-Za-z]/;
+    var testPostalLT = regexPostalLetter.test(postal);
+
+    if (testPostalLT == true) {
+      testPostalLetter = true;
+    }
+
+    if (testPostalCaracters == true || testPostalLetter == true) {
+      listError.push("le code postal doit contenir que des chiffres");
+    }
+
+    if (ville.length < 2) {
+      listError.push("la ville doit contenir au moins 2 lettres");
+    }
+    var regexVilleCt = /[^A-Za-z0-9_]/;
+    var testVilleCt = regexVilleCt.test(ville);
+
+    if (testVilleCt == true) {
+      testVilleCaracters = true;
+    }
+    var regexVilleNB = /[0-9]/;
+    var testVilleNumber = regexVilleNB.test(ville);
+
+    if (testVilleNumber == true) {
+      testVilleNB = true;
+    }
+    if (testVilleCaracters == true || testVilleNB == true) {
+      listError.push("la ville doit avoir que des lettres");
+    }
+    // ===========================vérification des erreurs===============================
+
+    if (listError) {
+      setError(listError[0]);
+    }
+    if (listError.length == 0) {
       navigation.navigate("Paiement", {
         nom: nom,
         prenom: prenom,
@@ -112,8 +254,8 @@ function Recapitulatif({ navigation, ball }) {
           style={{
             flex: 1,
             backgroundColor: "white",
-            marginRight: 10,
             justifyContent: "center",
+            borderRadius: 5,
           }}
         >
           <Text style={{ textAlign: "center" }}>
@@ -124,8 +266,6 @@ function Recapitulatif({ navigation, ball }) {
     );
   });
 
-  console.log("========nom", error);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -133,7 +273,7 @@ function Recapitulatif({ navigation, ball }) {
     >
       <ScrollView style={{ backgroundColor: "white" }}>
         <View style={styles.container}>
-          <Text style={{ fontSize: 18, marginTop: 20 }}>RECAPITULATIF</Text>
+          <Text style={{ fontSize: 18, marginTop: 60 }}>RECAPITULATIF</Text>
 
           <View
             style={{
@@ -145,13 +285,13 @@ function Recapitulatif({ navigation, ball }) {
               borderRadius: 5,
               borderWidth: 1,
               width: "95%",
-              backgroundColor: "orange",
+              backgroundColor: "#ffa500",
             }}
           >
             <View
               style={{
                 flex: 4,
-                backgroundColor: "orange",
+                backgroundColor: "#ffa500",
                 borderRadius: 5,
                 justifyContent: "center",
               }}
@@ -162,7 +302,7 @@ function Recapitulatif({ navigation, ball }) {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "orange",
+                backgroundColor: "#ffa500",
                 justifyContent: "center",
               }}
             >
@@ -172,7 +312,7 @@ function Recapitulatif({ navigation, ball }) {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "orange",
+                backgroundColor: "#ffa500",
                 justifyContent: "center",
               }}
             >
@@ -182,7 +322,7 @@ function Recapitulatif({ navigation, ball }) {
             <View
               style={{
                 flex: 1,
-                backgroundColor: "orange",
+                backgroundColor: "#ffa500",
                 borderRadius: 5,
                 justifyContent: "center",
               }}
@@ -240,8 +380,8 @@ function Recapitulatif({ navigation, ball }) {
               style={{
                 flex: 1,
                 backgroundColor: "white",
-                marginRight: 10,
                 justifyContent: "center",
+                borderRadius: 5,
               }}
             >
               <Text style={{ textAlign: "center" }}>{totalCmd}€</Text>
@@ -251,137 +391,55 @@ function Recapitulatif({ navigation, ball }) {
           <Text style={{ fontSize: 18, marginTop: 20 }}>
             adresse de livraison
           </Text>
-          <Text style={{ fontSize: 18, color: "red" }}>{error}</Text>
+          <Text style={{ fontSize: 18, color: "red", textAlign: "center" }}>
+            {error}
+          </Text>
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Nom"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setNom(e)}
           />
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Prénom"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setPrenom(e)}
           />
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Téléphone"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setTelephone(e)}
           />
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Adresse"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setAdresse(e)}
           />
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Code postal"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setPostal(e)}
           />
           <TextInput
-            keyboardType="email-address" // a bit of extra love for your users
-            autoCapitalize="none" // React Native default is to capitalise
+            keyboardType="email-address"
+            autoCapitalize="none"
             placeholderTextColor="gray"
             placeholder="Ville"
-            style={{
-              backgroundColor: "white",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "black",
-              height: 50,
-              width: "85%",
-              paddingLeft: 15,
-              marginTop: 5,
-              marginRight: 30,
-              marginBottom: 5,
-              marginLeft: 30,
-              fontSize: 18,
-              color: "black",
-            }}
+            style={styles.inputStyle}
             onChangeText={(e) => setVille(e)}
           />
 
@@ -393,7 +451,7 @@ function Recapitulatif({ navigation, ball }) {
               marginTop: 20,
               marginBottom: 20,
             }}
-            buttonStyle={{ backgroundColor: "orange" }}
+            buttonStyle={{ backgroundColor: "#ffa500" }}
             titleStyle={{ flex: 1, color: "black" }}
             onPress={() => shipping()}
           ></Button>
@@ -409,6 +467,21 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+  },
+  inputStyle: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "black",
+    height: 50,
+    width: "85%",
+    paddingLeft: 15,
+    marginTop: 5,
+    marginRight: 30,
+    marginBottom: 5,
+    marginLeft: 30,
+    fontSize: 18,
+    color: "black",
   },
 });
 function mapStateToProps(state) {

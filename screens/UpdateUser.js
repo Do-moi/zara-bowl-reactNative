@@ -1,34 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import Menu from "./Menu";
+import HttpLocal from "../Keyhttp/KeyLocal";
+import HttpHeroku from "../Keyhttp/KeyHeroku";
+import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
 
-import {
-  Card,
-  ListItem,
-  Button,
-  Icon,
-  Header,
-  Badge,
-} from "react-native-elements";
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 
-function UpdateUser({
-  navigation,
-  saveToken,
-  saveUserProfil,
-  userProfil,
-  token,
-}) {
+function UpdateUser({ navigation, saveUserProfil, userProfil, token }) {
   const [nom, setNom] = useState(userProfil.nom);
   const [prenom, setPrenom] = useState(userProfil.prenom);
   const [telephone, setTelephone] = useState(userProfil.telephone);
@@ -41,27 +19,292 @@ function UpdateUser({
   const [error, setError] = useState("");
 
   var handleSubmitUpdate = async () => {
-    console.log("====================handleSubmitUpdate");
-
-    var reponse = await fetch("http://192.168.1.115:3000/updateUser", {
-      method: "PUT",
-      headers: { "content-type": "application/x-www-form-urlencoded" },
-      body: `token=${token}&nom=${nom}&prenom=${prenom}&telephone=${telephone}&email=${email}&password=${password}&newPassword=${newPassword}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
-    });
-
-    var reponseJson = await reponse.json();
-    console.log("=================reponseJson", reponseJson);
-
-    if (reponseJson.result == false) {
-      console.log("=====if jsonresp error", reponseJson.error);
-      setError(reponseJson.error[0]);
+    var listError = [];
+    // ==================================test nom======================================================
+    var testNomCaractere = false;
+    var testNomLettre = false;
+    var nomNB = false;
+    // ==================================test prenom=======================================================
+    var testPrenomCaractere = false;
+    var testPrenomLettre = false;
+    var testPrenomNb = false;
+    // =====================================test email===================================================
+    var testEmail = false;
+    // ===================================test old password===============================================
+    var passwordNB = false;
+    var upperCase = false;
+    var lowerCase = false;
+    var caracteres = false;
+    // =====================================test new password============================================
+    var newPasswordUpperCase = false;
+    var newPasswordLowerCase = false;
+    var newPasswordNB = false;
+    var newPasswordCaracteres = false;
+    // ===================================test telephone===============================================
+    var telephoneLetter = false;
+    var telCt = false;
+    // ==================================test postal=======================================================
+    var testPostalCaracters = false;
+    var testPostalLetter = false;
+    // ==================================test ville==========================================================
+    var testVilleCaracters = false;
+    var testVilleNB = false;
+    // ===================================condition champs vides===========================================
+    if (
+      nom == "" ||
+      prenom == "" ||
+      adresse == "" ||
+      telephone == "" ||
+      email == "" ||
+      password == "" ||
+      postal == "" ||
+      ville == ""
+    ) {
+      listError.push("veuillez remplir l'adresse de livraison");
     }
-    if (reponseJson.result == true) {
-      saveUserProfil(reponseJson.findUser);
-      // console.log("=== saveToken=====", reponseJson.userToken);
-      // console.log("========userSaveProfil", reponseJson.userSearch);
-      setError("");
-      navigation.navigate("Profil");
+    // ============================condition nom====================================
+    var regexNom = /[^A-Za-z0-9_]/;
+    var testNom = regexNom.test(nom);
+
+    if (testNom == true) {
+      testNomCaractere = true;
+    }
+    var regexNom1 = /[0-9]/;
+    var testNom1 = regexNom1.test(nom);
+
+    if (testNom1 == true) {
+      nomNB = true;
+    }
+
+    var regexNom2 = /[A-Za-z]/;
+    var testNom2 = regexNom2.test(nom);
+    if (testNom2 == true) {
+      testNomLettre = true;
+    }
+    if (nom.length < 2) {
+      listError.push("le nom doit comporter au moins 2 lettres");
+    } else if (
+      testNomCaractere == true ||
+      nomNB == true ||
+      testNomLettre == false
+    ) {
+      listError.push("le nom doit comporter que des lettres");
+    }
+    // ============================condition prenom==========================================
+
+    var regexPrenom = /[^A-Za-z0-9_]/;
+    var testPrenom = regexPrenom.test(prenom);
+
+    if (testPrenom == true) {
+      testPrenomCaractere = true;
+    }
+    var regexPrenom1 = /[0-9]/;
+    var testPrenom1 = regexPrenom1.test(prenom);
+
+    if (testPrenom1 == true) {
+      testPrenomNb = true;
+    }
+
+    var regexPrenom2 = /[A-Za-z]/;
+    var testPrenom2 = regexPrenom2.test(prenom);
+
+    if (testPrenom2 == true) {
+      testPrenomLettre = true;
+    }
+    if (prenom.length < 2) {
+      listError.push("le prenom doit comporter au moins 2 lettres");
+    } else if (
+      testPrenomCaractere == true ||
+      testPrenomNb == true ||
+      testPrenomLettre == false
+    ) {
+      listError.push("le prenom doit comporter que des lettres");
+    }
+
+    // ==============================================condition numero telephone==========================
+
+    if (telephone.length != 10) {
+      listError.push("le numéro de téléphone doit comporter 10 chiffres");
+    }
+    var regexLetter = /[A-Za-z]/;
+    var testLetter = regexLetter.test(telephone);
+
+    if (testLetter == true) {
+      telephoneLetter = true;
+    }
+
+    var regexCt = /[^A-Za-z0-9_]/;
+    var testCt = regexCt.test(telephone);
+
+    if (testCt == true) {
+      telCt = true;
+    }
+
+    if (telephoneLetter == true) {
+      listError.push("le numéro de téléphone doit contenir que des chiffres");
+    } else if (telCt == true) {
+      listError.push("le numéro de téléphone doit contenir que des chiffres");
+    }
+    // ===========================================condition email==========================================================
+
+    var regexEmail = /@/;
+    var findRegexEmail = regexEmail.test(email);
+
+    if (findRegexEmail == true) {
+      testEmail = true;
+    }
+    if (testEmail == false) {
+      listError.push("format email incorrect");
+    }
+    // ======================================================condition password========================================
+
+    if (password.length < 6) {
+      listError.push("mot de passe minimum 6 caractères");
+    }
+    var regexUpperCase = /[A-Z]/;
+    var findUpperCase = regexUpperCase.test(password);
+
+    if (findUpperCase == true) {
+      upperCase = true;
+    }
+    var regexLowerCase = /[a-z]/;
+    var findLowerCase = regexLowerCase.test(password);
+
+    if (findLowerCase == true) {
+      lowerCase = true;
+    }
+
+    var regex = /[0-9]/;
+    var testNB = regex.test(password);
+
+    if (testNB == true) {
+      passwordNB = true;
+    }
+
+    var regex1 = /[^A-Za-z0-9_]/;
+    var testCaracteres = regex1.test(password);
+
+    if (testCaracteres == true) {
+      caracteres = true;
+    }
+
+    if (upperCase == false) {
+      listError.push("mot de passe minimum 1 majuscule ");
+    } else if (passwordNB == false) {
+      listError.push("mot de passe minimum 1 chiffre");
+    } else if (lowerCase == false) {
+      listError.push("mot de passe minimum 1 minuscule ");
+    } else if (caracteres == false) {
+      listError.push("mot de passe minimun 1 caractère spécial");
+    }
+    //  ==============================================condition nouveau password===========================
+    if (newPassword.length < 6) {
+      listError.push("nouveau mot de passe minimum 6 caractères");
+    }
+    var regexUpperCase = /[A-Z]/;
+    var findUpperCase = regexUpperCase.test(newPassword);
+
+    if (findUpperCase == true) {
+      newPasswordUpperCase = true;
+    }
+    var regexLowerCase = /[a-z]/;
+    var findLowerCase = regexLowerCase.test(newPassword);
+
+    if (findLowerCase == true) {
+      newPasswordLowerCase = true;
+    }
+
+    var regex = /[0-9]/;
+    var testNB = regex.test(newPassword);
+
+    if (testNB == true) {
+      newPasswordNB = true;
+    }
+
+    var regex1 = /[^A-Za-z0-9_]/;
+    var testCaracteres = regex1.test(newPassword);
+
+    if (testCaracteres == true) {
+      newPasswordCaracteres = true;
+    }
+
+    if (newPasswordUpperCase == false) {
+      listError.push("le nouveau mot de passe minimum 1 majuscule ");
+    } else if (newPasswordNB == false) {
+      listError.push("le nouveau mot de passe minimum 1 chiffre");
+    } else if (newPasswordLowerCase == false) {
+      listError.push("le nouveau mot de passe minimum 1 minuscule ");
+    } else if (newPasswordCaracteres == false) {
+      listError.push("le nouveau mot de passe minimun 1 caractère spécial");
+    }
+    // ========================================condition adresse=====================================
+
+    if (adresse.length < 8) {
+      listError.push("l'adresse doit avoir au moins 8 caractères");
+    }
+    //===========================================condition code postal===============================
+
+    if (postal.length != 5) {
+      listError.push("code postal incorrect");
+    }
+    var regexPostalCt = /[^A-Za-z0-9_]/;
+    var testPostalCt = regexPostalCt.test(postal);
+
+    if (testPostalCt == true) {
+      testPostalCaracters = true;
+    }
+    var regexPostalLetter = /[A-Za-z]/;
+    var testPostalLT = regexPostalLetter.test(postal);
+
+    if (testPostalLT == true) {
+      testPostalLetter = true;
+    }
+
+    if (testPostalCaracters == true || testPostalLetter == true) {
+      listError.push("le code postal doit contenir que des chiffres");
+    }
+    // ========================================condition ville===========================================
+    if (ville.length < 2) {
+      listError.push("la ville doit contenir au moins 2 lettres");
+    }
+    var regexVilleCt = /[^A-Za-z0-9_]/;
+    var testVilleCt = regexVilleCt.test(ville);
+
+    if (testVilleCt == true) {
+      testVilleCaracters = true;
+    }
+    var regexVilleNB = /[0-9]/;
+    var testVilleNumber = regexVilleNB.test(ville);
+
+    if (testVilleNumber == true) {
+      testVilleNB = true;
+    }
+    if (testVilleCaracters == true || testVilleNB == true) {
+      listError.push("la ville doit avoir que des lettres");
+    }
+    // ========================================
+    console.log("===============listError", listError);
+    if (listError) {
+      setError(listError[0]);
+    }
+    if (listError.length == 0) {
+      var reponse = await fetch(`${HttpLocal}/updateUser`, {
+        method: "PUT",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: `token=${token}&nom=${nom}&prenom=${prenom}&telephone=${telephone}&email=${email}&password=${password}&newPassword=${newPassword}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
+      });
+
+      var reponseJson = await reponse.json();
+
+      if (reponseJson.result == false) {
+        setError(reponseJson.error[0]);
+      }
+      if (reponseJson.result == true) {
+        saveUserProfil(reponseJson.findUser);
+
+        setError("");
+        navigation.navigate("Profil");
+      }
     }
   };
   var erreur = (
@@ -69,15 +312,17 @@ function UpdateUser({
       {error}
     </Text>
   );
-  console.log("==============updateUser", userProfil);
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
-        <Text style={{ fontSize: 20, marginTop: 20 }}>Modifier UN COMPTE</Text>
+        <Text style={{ fontSize: 20, marginTop: 20, textAlign: "center" }}>
+          Modifier UN COMPTE
+        </Text>
         {erreur}
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="NOM"
           style={styles.inputStyle}
@@ -85,8 +330,8 @@ function UpdateUser({
           value={nom}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="PRENOM"
           style={styles.inputStyle}
@@ -94,8 +339,8 @@ function UpdateUser({
           value={prenom}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="TELEPHONE"
           style={styles.inputStyle}
@@ -104,8 +349,8 @@ function UpdateUser({
         />
 
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="EMAIL"
           style={styles.inputStyle}
@@ -113,8 +358,8 @@ function UpdateUser({
           value={email}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="ANCIEN MOT DE PASSE"
           style={styles.inputStyle}
@@ -122,8 +367,8 @@ function UpdateUser({
           value={password}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="NOUVEAU MOT DE PASSE"
           style={styles.inputStyle}
@@ -131,8 +376,8 @@ function UpdateUser({
           value={newPassword}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="ADRESSE"
           style={styles.inputStyle}
@@ -140,8 +385,8 @@ function UpdateUser({
           value={adresse}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="CODE POSTAL"
           style={styles.inputStyle}
@@ -149,8 +394,8 @@ function UpdateUser({
           value={postal}
         />
         <TextInput
-          keyboardType="email-address" // a bit of extra love for your users
-          autoCapitalize="none" // React Native default is to capitalise
+          keyboardType="email-address"
+          autoCapitalize="none"
           placeholderTextColor="gray"
           placeholder="VILLE"
           style={styles.inputStyle}
@@ -170,7 +415,7 @@ function UpdateUser({
           <Button
             title="VALIDER"
             containerStyle={{ alignItems: "center", width: "85%" }}
-            buttonStyle={{ backgroundColor: "orange" }}
+            buttonStyle={{ backgroundColor: "#ffa500" }}
             titleStyle={{ color: "black", flex: 1 }}
             onPress={() => handleSubmitUpdate()}
           ></Button>
