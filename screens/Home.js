@@ -7,19 +7,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp , heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { connect } from "react-redux";
 import HttpLocal from "../Keyhttp/KeyLocal";
 import HttpHeroku from "../Keyhttp/KeyHeroku";
+
+
 function Home({ navigation, saveBallRedux }) {
+  
   useEffect(() => {
     const findApi = async () => {
-      var rep = await fetch(`${HttpLocal}/searchBall`);
+      var rep = await fetch(`${HttpHeroku}/searchBall`);
       var jsonRep = await rep.json();
-      console.log("==========jsonRep", jsonRep);
+
       saveBallRedux(jsonRep.response);
     };
     findApi();

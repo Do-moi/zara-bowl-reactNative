@@ -20,13 +20,13 @@ function Search({ navigation, route, listBalls }) {
         setBalls([...marque.list]);
       }
     });
-  }, [brand]);
+  }, []);
 
   var galleryPhoto = balls.map((ball, i) => {
     return (
-      <View style={{ height: hp("11%") }}>
+      <View  style={{ height: hp("11%") }}>
         <ListItem
-          key={i}
+          key={ball.name}
           leftAvatar={{ source: { uri: ball.img } }}
           title={ball.name}
           rightSubtitle={ball.price + "€"}

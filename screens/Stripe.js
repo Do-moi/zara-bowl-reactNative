@@ -133,7 +133,7 @@ function Stripe({ navigation, route, ball, tokenRdx }) {
         { ball: ball },
       ];
 
-      var response = await fetch(`${HttpLocal}/commande`, {
+      var response = await fetch(`${HttpHeroku}/commande`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, commandeId }),

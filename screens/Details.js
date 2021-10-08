@@ -5,7 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Dropdown } from "react-native-material-dropdown";
+import { Dropdown } from 'react-native-material-dropdown-v2'
 import { connect } from "react-redux";
 
 function Details({ navigation, route, saveBasketClick }) {
@@ -161,7 +161,7 @@ function Details({ navigation, route, saveBasketClick }) {
           <Dropdown
             label="poids"
             data={poids}
-            pickerStyle={{ borderBottomColor: "orange", borderWidth: 1 }}
+            // pickerStyle={{  borderWidth: 1 }}
             dropdownOffset={{ top: 0, left: 10 }}
             textColor="black"
             baseColor="black"
@@ -187,7 +187,8 @@ function Details({ navigation, route, saveBasketClick }) {
           <Dropdown
             label="quantité"
             data={quantite}
-            dropdownOffset={{ top: 0, left: 10 }}
+            dropdownOffset={ {top: 0, left: 0 }}
+            
             textColor="black"
             baseColor="black"
             containerStyle={styles.dropdown}
@@ -257,15 +258,15 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: "60%",
-    height: 40,
+    height: 50,
     backgroundColor: "white",
     opacity: 0.8,
     marginLeft: 0,
-    padding: 2,
-    marginTop: 20,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "black",
+    padding: 0,
+    marginTop: 0,
+    // borderRadius: 5,
+    // borderWidth: 1,
+    // borderColor: "black",
   },
   sizeImg: {
     height: hp("70%"), // 70% of height device screen

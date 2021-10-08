@@ -40,6 +40,7 @@ const ConnexionStack = createStackNavigator();
 const BasketStack = createStackNavigator();
 const ProfilStack = createStackNavigator();
 
+
 function HomeStackScreen({ navigation }) {
   return (
     <HomeStack.Navigator initialRouteName="Home">

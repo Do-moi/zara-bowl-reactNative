@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { ListItem, Button, Overlay } from "react-native-elements";
-
+import { withNavigationFocus } from "@react-navigation/compat";
 import { connect } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
+import HttpLocal from "../Keyhttp/KeyLocal";
+import HttpHeroku from "../Keyhttp/KeyHeroku";
 
-function Profil({ navigation, token, userProfil, deconnexionClick }) {
+function Profil({ navigation, token, userProfil, saveUserProfil }) {
   var tab = [];
+  useEffect(() => {
+    const findApi = async () => {
+      var rep = await fetch(`${HttpHeroku}/profil`, {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: `token=${token}`,
+      });
+      var jsonRep = await rep.json();
+      console.log("==========jsonRep", jsonRep);
+      saveUserProfil(jsonRep.profilUser);
+    };
+    findApi();
+  }, []);
 
-  if (userProfil.commande) {
-    tab = userProfil.commande;
-  }
   const [isVisible, setIsVisible] = useState(false);
   const [cmdDesc, setCmdDesc] = useState({});
 
@@ -19,6 +31,9 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
     setCmdDesc(ball);
   }
 
+  if (userProfil.commande) {
+    tab = userProfil.commande;
+  }
   var gallery = tab.map((ball, i) => {
     return (
       <View style={{ width: "100%" }}>
@@ -60,6 +75,12 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
             }}
             buttonStyle={{ backgroundColor: "white" }}
             onPress={() => navigation.navigate("UpdateUser")}
+            // onPress={() => 
+            // navigation.dispatch(
+            //   CommonActions.navigate({
+            //     name: 'UpdateUser'
+            //   })
+            // )}
           ></Button>
         </View>
       </View>
@@ -164,19 +185,25 @@ function Profil({ navigation, token, userProfil, deconnexionClick }) {
           }}
           buttonStyle={{ backgroundColor: "orange" }}
           titleStyle={{ color: "black", flex: 1 }}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [
-                  { name: "Profil" },
-                  {
-                    name: "Home",
-                  },
-                ],
-              })
-            )
-          }
+          // onPress={() =>
+          //   navigation.dispatch(
+          //     CommonActions.reset({
+          //       index: 1,
+          //       routes: [
+          //         { name: "Profil" },
+          //         {
+          //           name: "Home",
+          //         },
+          //       ],
+          //     })
+          //   )
+            onPress={() => navigation.navigate("Home")}
+            // navigation.dispatch(
+            //   CommonActions.navigate({
+            //     name: 'Home'
+            //   })
+            // )
+          // }
         ></Button>
       </View>
     </ScrollView>
@@ -200,7 +227,11 @@ function mapDispatchToProps(dispatch) {
         dispatch({ type: "deleteToken" }),
         dispatch({ type: "deleteProfil" });
     },
+    saveUserProfil: function (userProfil) {
+      dispatch({ type: "saveProfil", userProfil: userProfil });
+    },
   };
 }
+var profilRedux = connect(mapStateToProps, mapDispatchToProps)(Profil);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profil);
+export default withNavigationFocus(profilRedux);

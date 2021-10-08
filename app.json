@@ -1,19 +1,22 @@
 {
   "expo": {
-    "name": "front",
-    "slug": "front",
+    "name": "ZaraBowl",
+    "slug": "ZaraBowl",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
+    "android": {
+      "package": "com.ZaraBowl.bowling",
+      "versionCode": 1
+    },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dv8.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

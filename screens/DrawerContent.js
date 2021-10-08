@@ -68,6 +68,15 @@ function DrawerContent(props) {
           label="Déconnexion"
           labelStyle={{ marginLeft: 0 }}
           onPress={() => {
+           
+                  props.navigation.reset({
+                    index: 1,
+                    routes: [
+                      { name: "Profil" },
+                      
+                    ],
+                  })
+                
             props.deconnexionClick();
           }}
         />

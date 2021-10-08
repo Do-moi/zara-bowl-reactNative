@@ -160,8 +160,8 @@ function CreateUser({ navigation, saveToken, saveUserProfil }) {
     }
     // ======================================================condition password========================================
 
-    if (password.length < 6) {
-      listError.push("mot de passe minimum 6 caractères");
+    if (password.length < 8) {
+      listError.push("mot de passe minimum 8 caractères");
     }
     var regexUpperCase = /[A-Z]/;
     var findUpperCase = regexUpperCase.test(password);
@@ -250,7 +250,7 @@ function CreateUser({ navigation, saveToken, saveUserProfil }) {
       setError(listError[0]);
     }
     if (listError.length == 0) {
-      var reponse = await fetch(`${HttpLocal}/sign-up`, {
+      var reponse = await fetch(`${HttpHeroku}/sign-up`, {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: `nom=${nom}&prenom=${prenom}&telephone=${telephone}&email=${email}&password=${password}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
@@ -263,7 +263,6 @@ function CreateUser({ navigation, saveToken, saveUserProfil }) {
       }
       if (reponseJson.reponseSave == true) {
         saveToken(reponseJson.userToken);
-        saveUserProfil(reponseJson.profilUser);
 
         navigation.navigate("Profil");
       }
@@ -272,9 +271,12 @@ function CreateUser({ navigation, saveToken, saveUserProfil }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-    >
+    // behavior="position"
+    behavior={Platform.OS === "ios" ? "padding" : null}
+    // keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 60}
+  >
       <ScrollView style={{ backgroundColor: "white" }}>
+       
         <View style={styles.container}>
           <Text style={{ fontSize: 20, marginTop: 60 }}>CREER UN COMPTE</Text>
           <Text style={{ fontSize: 20, color: "red", textAlign: "center" }}>
@@ -382,8 +384,10 @@ function CreateUser({ navigation, saveToken, saveUserProfil }) {
             ></Button>
           </View>
         </View>
+        
       </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    
   );
 }
 
@@ -413,9 +417,6 @@ function mapDispatchToProps(dispatch) {
   return {
     saveToken: function (token) {
       dispatch({ type: "saveToken", token: token });
-    },
-    saveUserProfil: function (userProfil) {
-      dispatch({ type: "saveProfil", userProfil: userProfil });
     },
   };
 }

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import HttpLocal from "../Keyhttp/KeyLocal";
 import HttpHeroku from "../Keyhttp/KeyHeroku";
-import { StyleSheet, Text, View, ScrollView, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
@@ -158,8 +165,8 @@ function UpdateUser({ navigation, saveUserProfil, userProfil, token }) {
     }
     // ======================================================condition password========================================
 
-    if (password.length < 6) {
-      listError.push("mot de passe minimum 6 caractères");
+    if (password.length < 8) {
+      listError.push("mot de passe minimum 8 caractères");
     }
     var regexUpperCase = /[A-Z]/;
     var findUpperCase = regexUpperCase.test(password);
@@ -198,8 +205,8 @@ function UpdateUser({ navigation, saveUserProfil, userProfil, token }) {
       listError.push("mot de passe minimun 1 caractère spécial");
     }
     //  ==============================================condition nouveau password===========================
-    if (newPassword.length < 6) {
-      listError.push("nouveau mot de passe minimum 6 caractères");
+    if (newPassword.length < 8) {
+      listError.push("nouveau mot de passe minimum 8 caractères");
     }
     var regexUpperCase = /[A-Z]/;
     var findUpperCase = regexUpperCase.test(newPassword);
@@ -288,7 +295,7 @@ function UpdateUser({ navigation, saveUserProfil, userProfil, token }) {
       setError(listError[0]);
     }
     if (listError.length == 0) {
-      var reponse = await fetch(`${HttpLocal}/updateUser`, {
+      var reponse = await fetch(`${HttpHeroku}/updateUser`, {
         method: "PUT",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: `token=${token}&nom=${nom}&prenom=${prenom}&telephone=${telephone}&email=${email}&password=${password}&newPassword=${newPassword}&adresse=${adresse}&ville=${ville}&postal=${postal}`,
@@ -314,114 +321,116 @@ function UpdateUser({ navigation, saveUserProfil, userProfil, token }) {
   );
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <View style={styles.container}>
-        <Text style={{ fontSize: 20, marginTop: 20, textAlign: "center" }}>
-          Modifier UN COMPTE
-        </Text>
-        {erreur}
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="NOM"
-          style={styles.inputStyle}
-          onChangeText={(e) => setNom(e)}
-          value={nom}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="PRENOM"
-          style={styles.inputStyle}
-          onChangeText={(e) => setPrenom(e)}
-          value={prenom}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="TELEPHONE"
-          style={styles.inputStyle}
-          onChangeText={(e) => setTelephone(e)}
-          value={telephone}
-        />
+    <KeyboardAvoidingView>
+      <ScrollView style={{ backgroundColor: "white" }}>
+        <View style={styles.container}>
+          <Text style={{ fontSize: 20, marginTop: 20, textAlign: "center" }}>
+            Modifier UN COMPTE
+          </Text>
+          {erreur}
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="NOM"
+            style={styles.inputStyle}
+            onChangeText={(e) => setNom(e)}
+            value={nom}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="PRENOM"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPrenom(e)}
+            value={prenom}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="TELEPHONE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setTelephone(e)}
+            value={telephone}
+          />
 
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="EMAIL"
-          style={styles.inputStyle}
-          onChangeText={(e) => setEmail(e)}
-          value={email}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="ANCIEN MOT DE PASSE"
-          style={styles.inputStyle}
-          onChangeText={(e) => setPassword(e)}
-          value={password}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="NOUVEAU MOT DE PASSE"
-          style={styles.inputStyle}
-          onChangeText={(e) => setNewPassword(e)}
-          value={newPassword}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="ADRESSE"
-          style={styles.inputStyle}
-          onChangeText={(e) => setAdresse(e)}
-          value={adresse}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="CODE POSTAL"
-          style={styles.inputStyle}
-          onChangeText={(e) => setPostal(e)}
-          value={postal}
-        />
-        <TextInput
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="gray"
-          placeholder="VILLE"
-          style={styles.inputStyle}
-          onChangeText={(e) => setVille(e)}
-          value={ville}
-        />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="EMAIL"
+            style={styles.inputStyle}
+            onChangeText={(e) => setEmail(e)}
+            value={email}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="ANCIEN MOT DE PASSE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPassword(e)}
+            value={password}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="NOUVEAU MOT DE PASSE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setNewPassword(e)}
+            value={newPassword}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="ADRESSE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setAdresse(e)}
+            value={adresse}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="CODE POSTAL"
+            style={styles.inputStyle}
+            onChangeText={(e) => setPostal(e)}
+            value={postal}
+          />
+          <TextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="gray"
+            placeholder="VILLE"
+            style={styles.inputStyle}
+            onChangeText={(e) => setVille(e)}
+            value={ville}
+          />
 
-        <View
-          style={{
-            flex: 1,
+          <View
+            style={{
+              flex: 1,
 
-            flexDirection: "row",
-            marginTop: 30,
-            marginBottom: 30,
-          }}
-        >
-          <Button
-            title="VALIDER"
-            containerStyle={{ alignItems: "center", width: "85%" }}
-            buttonStyle={{ backgroundColor: "#ffa500" }}
-            titleStyle={{ color: "black", flex: 1 }}
-            onPress={() => handleSubmitUpdate()}
-          ></Button>
+              flexDirection: "row",
+              marginTop: 30,
+              marginBottom: 30,
+            }}
+          >
+            <Button
+              title="VALIDER"
+              containerStyle={{ alignItems: "center", width: "85%" }}
+              buttonStyle={{ backgroundColor: "#ffa500" }}
+              titleStyle={{ color: "black", flex: 1 }}
+              onPress={() => handleSubmitUpdate()}
+            ></Button>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

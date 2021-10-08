@@ -221,7 +221,7 @@ function Basket({ navigation, ball, deleteClick, token }) {
         >
           <View style={{ flex: 1, alignItems: "center" }}>
             <Button
-              title="retour accueil"
+              title="Continuer achat"
               titleStyle={{ color: "#ffa500" }}
               containerStyle={{
                 alignItems: "center",

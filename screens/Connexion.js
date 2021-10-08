@@ -18,7 +18,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-function Connexion({ navigation, saveToken, saveUserProfil }) {
+function Connexion({ navigation, saveToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -46,8 +46,8 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
     }
     // ===============================================condition password===================
 
-    if (password.length < 6) {
-      listError.push("mot de passe minimum 6 caractères");
+    if (password.length < 8) {
+      listError.push("mot de passe minimum 8 caractères");
     }
     var regexUpperCase = /[A-Z]/;
     var findUpperCase = regexUpperCase.test(password);
@@ -86,7 +86,7 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
       listError.push("mot de passe minimun 1 caractère spécial");
     }
     if (listError.length == 0) {
-      var rep = await fetch(`${HttpLocal}/sign-in`, {
+      var rep = await fetch(`${HttpHeroku}/sign-in`, {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: `email=${email}&password=${password}`,
@@ -95,7 +95,7 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
       console.log("==============jsonRep", jsonRep);
       if (jsonRep.findUser == true) {
         saveToken(jsonRep.token);
-        saveUserProfil(jsonRep.profilUser);
+
         setError(null);
         setEmail("");
         setPassword("");
@@ -109,11 +109,14 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-    >
+   
       <ScrollView style={{ backgroundColor: "white" }}>
+         <KeyboardAvoidingView
+      // style={{ paddingBottom: 40 }}
+      // behavior={Platform.OS == "ios" ? "padding" : "null"}
+      behavior='position'
+      // keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+    >
         <View style={styles.container}>
           <View style={{ width: wp("100%"), height: hp("35%") }}>
             <ImageBackground
@@ -182,7 +185,7 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
               ></Button>
             </View>
 
-            <View style={{ flex: 1, width: "100%" }}>
+            <View style={{ flex: 1, marginBottom: 20, width: "100%" }}>
               <Button
                 title="Créer un compte"
                 containerStyle={{ alignItems: "center", width: "85%" }}
@@ -198,14 +201,15 @@ function Connexion({ navigation, saveToken, saveUserProfil }) {
             </View>
           </View>
         </View>
+        </KeyboardAvoidingView>
       </ScrollView>
-    </KeyboardAvoidingView>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "white",
     alignItems: "center",
   },
@@ -214,9 +218,6 @@ function mapDispatchToProps(dispatch) {
   return {
     saveToken: function (token) {
       dispatch({ type: "saveToken", token: token });
-    },
-    saveUserProfil: function (userProfil) {
-      dispatch({ type: "saveProfil", userProfil: userProfil });
     },
   };
 }
