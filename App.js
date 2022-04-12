@@ -40,7 +40,6 @@ const ConnexionStack = createStackNavigator();
 const BasketStack = createStackNavigator();
 const ProfilStack = createStackNavigator();
 
-
 function HomeStackScreen({ navigation }) {
   return (
     <HomeStack.Navigator initialRouteName="Home">
@@ -55,6 +54,8 @@ function HomeStackScreen({ navigation }) {
           headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableHighlight
+              activeOpacity={0.2}
+              underlayColor="#ffa500"
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             >
               <FontAwesome name="bars" size={20} style={{ color: "black" }} />
