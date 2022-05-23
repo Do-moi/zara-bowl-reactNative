@@ -254,7 +254,6 @@ const styles = StyleSheet.create({
     height: hp("100%"),
     backgroundColor: "white",
     alignItems: "center",
-    // justifyContent: "center",
   },
   dropdown: {
     width: "60%",
@@ -264,9 +263,6 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     padding: 0,
     marginTop: 0,
-    // borderRadius: 5,
-    // borderWidth: 1,
-    // borderColor: "black",
   },
   sizeImg: {
     height: hp("70%"), // 70% of height device screen
