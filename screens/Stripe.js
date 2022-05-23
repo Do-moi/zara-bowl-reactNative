@@ -12,7 +12,7 @@ import { CreditCardInput } from "react-native-credit-card-input";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 var stripe = require("stripe-client")(
-  "pk_test_ogc5L6lv4iWj8N1lPlGd3wKl00TpkY2uur"
+  "**************************************"
 );
 
 function Stripe({ navigation, route, ball, tokenRdx }) {
