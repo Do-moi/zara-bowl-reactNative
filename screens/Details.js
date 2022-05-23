@@ -161,7 +161,6 @@ function Details({ navigation, route, saveBasketClick }) {
           <Dropdown
             label="poids"
             data={poids}
-            // pickerStyle={{  borderWidth: 1 }}
             dropdownOffset={{ top: 0, left: 10 }}
             textColor="black"
             baseColor="black"
