@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ImageBackground } from "react-native";
+import { View, ImageBackground } from "react-native";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
