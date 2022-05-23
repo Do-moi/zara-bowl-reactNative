@@ -185,25 +185,8 @@ function Profil({ navigation, token, userProfil, saveUserProfil }) {
           }}
           buttonStyle={{ backgroundColor: "orange" }}
           titleStyle={{ color: "black", flex: 1 }}
-          // onPress={() =>
-          //   navigation.dispatch(
-          //     CommonActions.reset({
-          //       index: 1,
-          //       routes: [
-          //         { name: "Profil" },
-          //         {
-          //           name: "Home",
-          //         },
-          //       ],
-          //     })
-          //   )
-            onPress={() => navigation.navigate("Home")}
-            // navigation.dispatch(
-            //   CommonActions.navigate({
-            //     name: 'Home'
-            //   })
-            // )
-          // }
+          onPress={() => navigation.navigate("Home")}
+            
         ></Button>
       </View>
     </ScrollView>
